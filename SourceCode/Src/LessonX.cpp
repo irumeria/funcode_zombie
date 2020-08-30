@@ -31,10 +31,8 @@ struct Zombie{
 	int classify;
 	float x;
 	float y;
-	float birthday; // 与下面的shoot_flag配合全局的counter完成定时行为
-	int eatable_flag; // 与人距离缩短到一定程度之后增
-	int get_shot_flag; // 被击中时为true
-	int walk_flag; // 控制僵尸定时走路的旗子
+	float birthday; // 配合全局的counter完成定时行为
+	boolean get_shot_timer; // 被击中时为录入击中状态的时间
 	int life;
 	boolean active;
 };
@@ -92,7 +90,7 @@ void playerMove();
 #define BULLET_TYPE3_SPEED 50.0
 
 // 各种类僵尸速度设定
-#define ZOMBIE_TYPE1_SPEED 8.0
+#define ZOMBIE_TYPE1_SPEED 5.0
 #define ZOMBIE_TYPE2_SPEED 30.0
 #define ZOMBIE_TYPE3_SPEED 25.0
 #define ZOMBIE_TYPE4_SPEED 25.0
@@ -108,6 +106,10 @@ void playerMove();
 
 #define PI 3.1415926535
 
+// 计时间隔
+#define ZOMBIE_APPEAR_TIME 1.8
+#define BULLET_APPEAR_TIME 0.6
+#define ZOMBIE_HITTEN_TIME 0.3
 //==============================================================================
 //
 // 声明全局变量
@@ -202,8 +204,8 @@ void GameInit()
 
 	// 初始化计数器 与 计时器
 	counter = 0;
-	zombie_appear_timer = 0.6;
-	bullet_appear_timer = 0.5;
+	zombie_appear_timer = ZOMBIE_APPEAR_TIME;
+	bullet_appear_timer = BULLET_APPEAR_TIME;
 
 	// 拿到窗口边界
 	SCREEN_LEFT = dGetScreenLeft();
@@ -221,11 +223,8 @@ void GameInit()
 		zombie[i].y = 0;
 		zombie[i].life = 0;
 		zombie[i].birthday = 0;
-		zombie[i].eatable_flag = false;
 		zombie[i].active = false;
-		zombie[i].eatable_flag = 0;
-		zombie[i].get_shot_flag = false;
-		zombie[i].walk_flag = 0;
+		zombie[i].get_shot_timer = 0;
 	}
 
 	// 初始化子弹
@@ -269,22 +268,32 @@ void GameInit()
 // 每局游戏进行中
 void GameRun( float fDeltaTime )
 {
+	int i; // 循环控制变量
+
 	// 计时
 	counter += fDeltaTime;	
 	zombie_appear_timer -= fDeltaTime;
 	bullet_appear_timer -= fDeltaTime;
+	for( i = 0;i < ZOMBIE_MAX;i++){
+		zombie[i].get_shot_timer -= fDeltaTime;
+		if(zombie[i].get_shot_timer < 0 ){
+			zombie[i].get_shot_timer = 0;
+		}
+	}
 
 	// 以相等的间隔激活Zombie
 	if( zombie_appear_timer < 0 ){
-		zombie_appear_timer = 0.6;
+		zombie_appear_timer = ZOMBIE_APPEAR_TIME;
 		newZombie(SCREEN_RIGHT*2*(rand()%10/10.0) - SCREEN_RIGHT, SCREEN_TOP); // 在画面顶部生成一下测试用僵尸	
 	}
 
 	// 以相等的间隔发射Bullet
+	// 需满足 1. 空格键弹起 2. 0.5秒的子弹装填时间 才可以发射子弹
 	if ( shooting_flag == true){
 		if( bullet_appear_timer < 0){
 			playerShot();
 			shooting_flag = false;
+			bullet_appear_timer = BULLET_APPEAR_TIME;
 		}
 		else{
 			shooting_flag = false;
@@ -409,14 +418,14 @@ void OnSpriteColSprite( const char *szSrcName, const char *szTarName )
 			dSetSpriteVisible(szName_bullet,0);
 		}
 		for(j = 0;j < ZOMBIE_MAX;j++){
-			if(!zombie[i].active){
+			if(!zombie[j].active){
 				continue;
 			}
 			char szName_zombie[64];
-			sprintf(szName_zombie,"zombie_%d",j);
+ 			sprintf(szName_zombie,"zombie_%d",j);
 			if(!strcmp(szTarName, szName_zombie)){
-				zombie[i].life--;
-				zombie[i].get_shot_flag = true;
+				zombie[j].life--;
+				zombie[j].get_shot_timer = ZOMBIE_HITTEN_TIME;
 			}
 		}
 	}
@@ -439,7 +448,6 @@ void OnSpriteColWorldLimit( const char *szName, const int iColSide )
 
 void Move() {	
 
-	printf("moving");
 	int i; // 循环控制变量
 
 	//按类型分发Zombie行为
@@ -448,22 +456,18 @@ void Move() {
 		// 同步位置数据
 		char szName[64];
 		sprintf(szName,"zombie_%d",i);
-		zombie[i].x = dGetSpritePositionX(szName);
-		zombie[i].y = dGetSpritePositionY(szName);
 
 		if( !zombie[i].active ){
 			continue;
 		}
 		// 被击中的Zombie显黄色
-		if( zombie[i].get_shot_flag ){
-			zombie[i].get_shot_flag = false;
+		if( zombie[i].get_shot_timer > 0 ){
 			turnYellow(szName);
 		}else{
 			turnWhite(szName);
 		}
 		switch ( zombie[i].classify ) {
 			case 1:
-				printf("ID%d:",i);
 				move_zombie_classify1( &zombie[i] , szName );
 				break;
 			default:
@@ -472,6 +476,9 @@ void Move() {
 	}
 	// bullet 行为
 	for(i = 0;i <BULLET_MAX;i++){
+		if( !bullet[i].active ){
+			continue;
+		}
 		char szName[64];
 		sprintf(szName,"bullet_%d",i);
 		bulletMove( &bullet[i] ,szName);
@@ -493,13 +500,13 @@ void Move() {
  */
 int newZombie(float ix, float iy){
 	for (int i = 0; i < ZOMBIE_MAX; i++) {
-		if ((zombie[i].active) == false) {
+		if (zombie[i].active == false) {
 			// 内部
 			zombie[i].x = ix;
 			zombie[i].y = iy;
 			zombie[i].classify = 1; // 完成框架前，先把所有僵尸当作种类1
 			zombie[i].life = LIFE_OF_TYPE1;	
-			zombie[i].active = true;
+ 			zombie[i].active = true;
 			zombie[i].birthday = counter;
 
 			// 外部显示
@@ -508,7 +515,6 @@ int newZombie(float ix, float iy){
 			dSetSpritePositionX(szName,zombie[i].x);
 			dSetSpritePositionY(szName,zombie[i].y);
 			dSetSpriteVisible(szName,1); 
-			printf("new zombie_%d in (zombie[i].x, zombie[i].y)\n",i);
 			return i;
 		}
 	}
@@ -516,8 +522,8 @@ int newZombie(float ix, float iy){
 }
 
 /**
- * Zombie的行为1
- * 僵尸朝着玩家的方向走
+ * Zombie挂掉
+ * 消失了
  */
 void Disappear( struct Zombie* zombie , char* szName ){
 	zombie->active = false;
@@ -530,6 +536,12 @@ void Disappear( struct Zombie* zombie , char* szName ){
  * 僵尸朝着玩家的方向走
  */
 void move_zombie_classify1(struct Zombie* zombie , char* szName){
+
+	// 同步位置
+	zombie->x = dGetSpritePositionX(szName);
+	zombie->y = dGetSpritePositionY(szName);
+
+	// 朝着人方向走
 	float deltaX = player.x - zombie->x ;
 	float deltaY = player.y - zombie->y ;
 	float delta = sqrt( (deltaX*deltaX) + (deltaY*deltaY) );
@@ -537,7 +549,6 @@ void move_zombie_classify1(struct Zombie* zombie , char* szName){
 	float speedX = (deltaX / delta) * ZOMBIE_TYPE1_SPEED;
 	dSetSpriteLinearVelocityY( szName, speedY );
 	dSetSpriteLinearVelocityX( szName, speedX );	
-	printf("zombie go to (%.2f, %.2f)",zombie->x,zombie->y);
 
 	// 判断是否死亡
 	if( zombie->life <= 0){
@@ -577,9 +588,9 @@ int newBullet(float ix, float iy, float idirection, float ispeed) {
 			bullet[i].speed = ispeed;
 			bullet[i].active = true;
 
-			//提高处理速度，从极坐标转到直角坐标
+			// 从极坐标转到直角坐标
 			double radian;
-			radian = bullet[i].direction*2*PI/360;	//度数转弧度
+			radian = bullet[i].direction*2*PI/360;	// 度数转弧度
 			bullet[i].speedX = bullet[i].speed * cos(radian);
 			bullet[i].speedY = -bullet[i].speed * sin(radian); // 右手系转左手系
 
@@ -591,6 +602,7 @@ int newBullet(float ix, float iy, float idirection, float ispeed) {
 				bullet[i].speedX,
 				bullet[i].speedY
 			);
+			dSetSpriteRotation( szName, 90 - bullet[i].direction );
 			dSetSpriteVisible(szName,1);
 			return i;
 		}
@@ -617,6 +629,7 @@ void bulletMove( struct Bullet* bullet ,char* szName){
 /* 玩家发射子弹 */
 void playerShot() {	
 	if(life > 0){
+		dPlaySound("game/data/audio/gun_type1.wav", 0, 1 );
 		newBullet(player.x, player.y,player.direction,BULLET_TYPE1_SPEED);
 	}	
 }
