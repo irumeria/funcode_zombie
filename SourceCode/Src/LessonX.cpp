@@ -32,7 +32,7 @@ struct Zombie{
 	float x;
 	float y;
 	float birthday; // 配合全局的counter完成定时行为
-	boolean get_shot_timer; // 被击中时为录入击中状态的时间
+	float get_shot_timer; // 被击中时为录入击中状态的时间
 	int life;
 	boolean active;
 };
@@ -60,6 +60,14 @@ struct Player{
 	float speedBottom ;  	// 下
 };
 
+/* 墙壁 */
+struct Wall{
+	float x;
+	float y;
+	int classify;
+	int life;
+	boolean active;
+};
 
 //==============================================================================
 //
@@ -81,13 +89,14 @@ void playerMove();
 // 声明常量
 
 //单位最大数量设定
-#define ZOMBIE_MAX 50
+#define ZOMBIE_MAX 150
 #define BULLET_MAX 30
+#define WALL_MAX 150
 
 // 子弹速度设定
-#define BULLET_TYPE1_SPEED 100.0
-#define BULLET_TYPE2_SPEED 200.0
-#define BULLET_TYPE3_SPEED 50.0
+#define BULLET_TYPE1_SPEED 150.0
+#define BULLET_TYPE2_SPEED 300.0
+#define BULLET_TYPE3_SPEED 75.0
 
 // 各种类僵尸速度设定
 #define ZOMBIE_TYPE1_SPEED 5.0
@@ -95,14 +104,18 @@ void playerMove();
 #define ZOMBIE_TYPE3_SPEED 25.0
 #define ZOMBIE_TYPE4_SPEED 25.0
 
+// 各种类墙壁的生命值设定
+#define WALL_TYPE1_LIFE 8
+#define WALL_TYPE2_LIFE 20
+
 // 玩家初始生命值设定
 #define LIFE_INIT 5
 
 // 各种类僵尸初始生命值设定
-#define LIFE_OF_TYPE1 5
-#define LIFE_OF_TYPE2 10
-#define LIFE_OF_TYPE3 8
-#define LIFE_OF_TYPE4 3
+#define ZOMBIE_TYPE1_LIFE 3
+#define ZOMBIE_TYPE2_LIFE 10
+#define ZOMBIE_TYPE3_LIFE 8
+#define ZOMBIE_TYPE4_LIFE 2
 
 #define PI 3.1415926535
 
@@ -118,6 +131,7 @@ boolean GodMode = false;	//无敌模式（调试用）
 
 struct Bullet bullet[BULLET_MAX];	//预生成Bullet池
 struct Zombie zombie[ZOMBIE_MAX];	//预生成Zombie池
+struct Wall wall[WALL_MAX];
 struct Player player;
 
 int life; // 生命值
@@ -194,6 +208,10 @@ void GameMainLoop( float	fDeltaTime )
 // 每局开始前进行初始化，清空上一局相关数据
 void GameInit()
 {
+	// 先播个音乐
+
+	dPlaySound("game/data/audio/bgm_test1.ogg", 1, 1.0 );
+
 	// 初始化生命值 / 分数 / 金钱
 	life = LIFE_INIT;
 	money = 0;
@@ -216,6 +234,7 @@ void GameInit()
 	// 循环控制变量	
 	int i;
 
+
 	// 初始化zombie
 	for(i = 0; i < ZOMBIE_MAX; i++) {
 		zombie[i].classify = 1;
@@ -237,6 +256,15 @@ void GameInit()
 		bullet[i].active = false;
 	}
 
+	// 初始化墙壁
+	for(i = 0;i < WALL_MAX;i++){
+		wall[i].x = 0.0;
+		wall[i].y = 0.0;
+		wall[i].life = 0;
+		wall[i].classify = 1;
+		wall[i].active = false;
+	}
+
 	// 初始化玩家
 	player.x = 0;
 	player.y = SCREEN_BOTTOM - 10;
@@ -247,9 +275,11 @@ void GameInit()
 	player.speedBottom = 0.f;  	// 下
 	dSetSpritePosition("player",player.x,player.y);
 
+	// 共用字符串地址，避免资源浪费
+	char szName[64];
+
 	// 初始化zombie精灵
-	for(i = 0; i < ZOMBIE_MAX; i++) {
-		char szName[64];
+	for(i = 0; i < ZOMBIE_MAX; i++) {		
 		sprintf(szName, "zombie_%d", i);
 		dCloneSprite("zombie",szName);
 		dSetSpriteVisible(szName,0); // 设置它们不可见
@@ -257,10 +287,16 @@ void GameInit()
 
 	// 初始化bullet精灵
 	for(i = 0; i < BULLET_MAX; i++){
-		char szName[64];
 		sprintf(szName,"bullet_%d",i);
 		dCloneSprite("bullet",szName);
 		dSetSpriteVisible(szName,0); // 设置它们不可见
+	}
+
+	// 初始化wall精灵
+	for(i = 0;i < WALL_MAX;i++){
+		sprintf(szName,"wall_%d",i);
+		dCloneSprite("wall",szName);
+		dSetSpriteVisible(szName,0);
 	}
 }
 //==============================================================================
@@ -496,7 +532,7 @@ void Move() {
  * Zombie的激活
  * 参数 ix(float)：生成处x坐标
  * 参数 iy(float)：生成处y坐标
- * 返回 子弹ID(int)：(如果没有空缺：-1)
+ * 返回 僵尸ID(int)：(如果没有空缺：-1)
  */
 int newZombie(float ix, float iy){
 	for (int i = 0; i < ZOMBIE_MAX; i++) {
@@ -505,7 +541,7 @@ int newZombie(float ix, float iy){
 			zombie[i].x = ix;
 			zombie[i].y = iy;
 			zombie[i].classify = 1; // 完成框架前，先把所有僵尸当作种类1
-			zombie[i].life = LIFE_OF_TYPE1;	
+			zombie[i].life = ZOMBIE_TYPE1_LIFE;	
  			zombie[i].active = true;
 			zombie[i].birthday = counter;
 
@@ -557,7 +593,7 @@ void move_zombie_classify1(struct Zombie* zombie , char* szName){
 }
 
 //===========================================================================
-
+//
 // 关于 子弹 的函数
 
 /**
@@ -621,6 +657,40 @@ void bulletMove( struct Bullet* bullet ,char* szName){
 		dSetSpriteVisible(szName,0);
 	}
 }
+//===========================================================================
+//
+// 关于 墙壁 的函数
+
+/**
+ * Wall的激活
+ * 参数 ix(float)：生成处x坐标
+ * 参数 iy(float)：生成处y坐标
+ * 参数 classify(int): 生成墙壁的种类
+ * 返回 墙壁ID(int)：(如果没有空缺：-1)
+ */
+int newWall(float ix, float iy, int classify){
+	char szName[64];
+	for (int i = 0; i < WALL_MAX; i++) {
+		if (wall[i].active == false) {
+			// 内部
+			wall[i].x = ix;
+			wall[i].y = iy;
+			wall[i].classify = classify; 
+			wall[i].life = ZOMBIE_TYPE1_LIFE;	// 完成框架前，先将所有墙壁当作种类1
+ 			wall[i].active = true;
+
+			// 外部显示		
+			sprintf(szName,"wall_%d",i);
+			dSetSpritePositionX(szName,wall[i].x);
+			dSetSpritePositionY(szName,wall[i].y);
+			dSetSpriteVisible(szName,1); 
+			return i;
+		}
+	}
+	return -1;
+}
+
+
 
 //===========================================================================
 //
