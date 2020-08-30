@@ -67,6 +67,9 @@
       WorldLimitMin = "-50.000 -37.500";
       WorldLimitMax = "50.000 37.500";
       CollisionActiveReceive = "1";
+      CollisionPhysicsSend = "1";
+      CollisionPhysicsReceive = "1";
+      CollisionResponseMode = "CLAMP";
       CollisionPolyList = "-0.491 -0.732 0.491 -0.737 0.476 0.648 -0.511 0.638";
          mountID = "4";
    };
