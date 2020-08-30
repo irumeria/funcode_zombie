@@ -202,4 +202,24 @@ $managedDatablockSet = new SimSet() {
       allowUnload = "0";
       force16Bit = "0";
    };
+   new t2dImageMapDatablock(DandanTarget1ImageMap) {
+      imageName = "~/data/images/DandanTarget1.dds";
+      imageMode = "CELL";
+      frameCount = "-1";
+      filterMode = "SMOOTH";
+      filterPad = "1";
+      preferPerf = "1";
+      cellRowOrder = "1";
+      cellOffsetX = "0";
+      cellOffsetY = "0";
+      cellStrideX = "0";
+      cellStrideY = "0";
+      cellCountX = "4";
+      cellCountY = "4";
+      cellWidth = "64";
+      cellHeight = "92";
+      preload = "1";
+      allowUnload = "0";
+      force16Bit = "0";
+   };
 };
