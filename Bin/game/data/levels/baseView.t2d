@@ -86,4 +86,19 @@
       CollisionActiveSend = "1";
          mountID = "5";
    };
+   new t2dStaticSprite(wall) {
+      imageMap = "DandanTarget1ImageMap";
+      frame = "0";
+      useSourceRect = "0";
+      sourceRect = "0 0 0 0";
+      canSaveDynamicFields = "1";
+      Position = "5.802 -49.438";
+      size = "5.693 8.875";
+      WorldLimitMin = "-50.000 -37.500";
+      WorldLimitMax = "50.000 37.500";
+      CollisionActiveSend = "1";
+      CollisionPhysicsSend = "1";
+      CollisionResponseMode = "CLAMP";
+         mountID = "6";
+   };
 };
