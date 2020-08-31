@@ -210,7 +210,7 @@ void GameInit()
 {
 	// 先播个音乐
 
-	dPlaySound("game/data/audio/bgm_test1.ogg", 1, 1.0 );
+	dPlaySound("bgm_test1.ogg", 1, 1.0 );
 
 	// 初始化生命值 / 分数 / 金钱
 	life = LIFE_INIT;
@@ -699,7 +699,7 @@ int newWall(float ix, float iy, int classify){
 /* 玩家发射子弹 */
 void playerShot() {	
 	if(life > 0){
-		dPlaySound("game/data/audio/gun_type1.wav", 0, 1 );
+		dPlaySound("gun_type1.wav", 0, 1 );
 		newBullet(player.x, player.y,player.direction,BULLET_TYPE1_SPEED);
 	}	
 }
