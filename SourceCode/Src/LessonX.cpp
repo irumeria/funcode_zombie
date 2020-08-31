@@ -83,6 +83,8 @@ int newBullet(float ix, float iy, float idirection, float ispeed);
 void bulletMove( struct Bullet* bullet, char* szName);
 void playerShot();
 void playerMove();
+int newWall(float ix, float iy, int classify);
+void wallMove(struct Wall* wall, char* szName);
 
 //==============================================================================
 //
@@ -209,7 +211,6 @@ void GameMainLoop( float	fDeltaTime )
 void GameInit()
 {
 	// 先播个音乐
-
 	dPlaySound("bgm_test1.ogg", 1, 1.0 );
 
 	// 初始化生命值 / 分数 / 金钱
@@ -298,6 +299,13 @@ void GameInit()
 		dCloneSprite("wall",szName);
 		dSetSpriteVisible(szName,0);
 	}
+
+	// 随机创建地图上的墙壁
+	// for(i = 0;i < 10;i++){
+	// 	float random1 = rand()%10/10.0*SCREEN_RIGHT*2 - SCREEN_RIGHT;
+	// 	float random2 = rand()%10/10.0*SCREEN_BOTTOM*2 - SCREEN_BOTTOM;
+	// 	newWall(random1,random2,1); // 完成框架前先把所有墙壁当作类型1
+	// }
 }
 //==============================================================================
 //
@@ -312,9 +320,6 @@ void GameRun( float fDeltaTime )
 	bullet_appear_timer -= fDeltaTime;
 	for( i = 0;i < ZOMBIE_MAX;i++){
 		zombie[i].get_shot_timer -= fDeltaTime;
-		if(zombie[i].get_shot_timer < 0 ){
-			zombie[i].get_shot_timer = 0;
-		}
 	}
 
 	// 以相等的间隔激活Zombie
@@ -443,25 +448,36 @@ void OnSpriteColSprite( const char *szSrcName, const char *szTarName )
 {
 	int i; // i,j为循环控制变量
 	int j;
+	char szName_bullet[64];
+	char szName_zombie[64];
+	char szName_wall[64];
 	for(i = 0;i < BULLET_MAX;i++){
 		if(!bullet[i].active){
 			continue;
-		}
-		char szName_bullet[64];
+		}		
 		sprintf(szName_bullet,"bullet_%d",i);
-		if(!strcmp(szSrcName, szName_bullet)){
+		if( !strcmp(szSrcName, szName_bullet) ){
 			bullet->active = false;
 			dSetSpriteVisible(szName_bullet,0);
 		}
 		for(j = 0;j < ZOMBIE_MAX;j++){
 			if(!zombie[j].active){
 				continue;
-			}
-			char szName_zombie[64];
+			}	
  			sprintf(szName_zombie,"zombie_%d",j);
-			if(!strcmp(szTarName, szName_zombie)){
+			if( !strcmp(szTarName, szName_zombie) ){
 				zombie[j].life--;
 				zombie[j].get_shot_timer = ZOMBIE_HITTEN_TIME;
+			}
+		}
+		for(j = 0;j < WALL_MAX;j++){
+			if(!wall[j].active){
+				continue;
+			}
+			sprintf(szName_wall,"wall_%d",j);
+			if( !strcmp(szTarName,szName_wall) ){
+				wall[j].life--;
+				// wall[j].get_shot_timer = WALL_HITTEN_TIME;
 			}
 		}
 	}
@@ -483,19 +499,15 @@ void OnSpriteColWorldLimit( const char *szName, const int iColSide )
 // 全局函数
 
 void Move() {	
-
+	char szName[64];
 	int i; // 循环控制变量
 
 	//按类型分发Zombie行为
 	for(i = 0;i <ZOMBIE_MAX;i++){
-
-		// 同步位置数据
-		char szName[64];
-		sprintf(szName,"zombie_%d",i);
-
 		if( !zombie[i].active ){
 			continue;
 		}
+		sprintf(szName,"zombie_%d",i);
 		// 被击中的Zombie显黄色
 		if( zombie[i].get_shot_timer > 0 ){
 			turnYellow(szName);
@@ -511,17 +523,24 @@ void Move() {
 		}
 	}
 	// bullet 行为
-	for(i = 0;i <BULLET_MAX;i++){
+	for(i = 0;i < BULLET_MAX;i++){
 		if( !bullet[i].active ){
 			continue;
 		}
-		char szName[64];
 		sprintf(szName,"bullet_%d",i);
-		bulletMove( &bullet[i] ,szName);
+		bulletMove( &bullet[i] ,szName );
 	}
+	// wall 行为
+	for(i = 0;i < WALL_MAX;i++){
+		if( !wall[i].active ){
+			continue;
+		}
+		sprintf(szName,"wall_%d",i);
+		wallMove( &wall[i],szName);
+	}
+	
 	// player 行为
 	playerMove();
-	
 	
 }
 
@@ -690,7 +709,13 @@ int newWall(float ix, float iy, int classify){
 	return -1;
 }
 
-
+/* 墙壁的行为 */
+void wallMove(struct Wall* wall, char* szName){
+	if( wall->life <= 0){
+		wall->active = false;
+		dSetSpriteVisible(szName,0);
+	}
+}
 
 //===========================================================================
 //

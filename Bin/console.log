@@ -1,7 +1,7 @@
-//-------------------------- 8/31/2020 -- 09:25:38 -----
+//-------------------------- 8/31/2020 -- 10:34:04 -----
 Processor Init:
-   Intel (unknown, Pentium Pro/II/III family), ~1.95 Ghz
-     (timed at roughly 1.97 Ghz)
+   Intel (unknown, Pentium Pro/II/III family), ~2.00 Ghz
+     (timed at roughly 1.99 Ghz)
    FPU detected
    MMX detected
    SSE detected
@@ -114,7 +114,6 @@ Loading compiled script G:/FunCode/Games/Zombie/Bin/common/gameScripts/align.cs.
 FunCode (v1.7.5) initialized...
 Loading compiled script G:/FunCode/Games/Zombie/Bin/game/managed/datablocks.cs.
 Loading compiled script G:/FunCode/Games/Zombie/Bin/game/managed/persistent.cs.
-Compiling G:/FunCode/Games/Zombie/Bin/game/managed/brushes.cs...
 Loading compiled script G:/FunCode/Games/Zombie/Bin/game/managed/brushes.cs.
 Loading compiled script G:/FunCode/Games/Zombie/Bin/game/gui/mainScreen.gui.
 Loading compiled script G:/FunCode/Games/Zombie/Bin/game/gameScripts/game.cs.

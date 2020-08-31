@@ -90,10 +90,10 @@
       imageMap = "DandanTarget1ImageMap";
       frame = "0";
       useSourceRect = "0";
-      sourceRect = "0 0 0 0";
+      sourceRect = "0 0 2.36005e-039 6.22898e-039";
       canSaveDynamicFields = "1";
-      Position = "5.802 -49.438";
-      size = "5.693 8.875";
+      Position = "3.230 -44.447";
+      size = "3.541 5.715";
       WorldLimitMin = "-50.000 -37.500";
       WorldLimitMax = "50.000 37.500";
       CollisionActiveSend = "1";
