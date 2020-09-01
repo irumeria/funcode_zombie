@@ -31,6 +31,9 @@ struct Zombie{
 	int classify;
 	float x;
 	float y;
+	float speedX;
+	float speedY;
+	float direction;
 	float birthday; // 配合全局的counter完成定时行为
 	float get_shot_timer; // 被击中时为录入击中状态的时间
 	int life;
@@ -53,11 +56,14 @@ struct Bullet{
 struct Player{
 	float x;
 	float y;
-	float direction;
+	int id;
+	int life;
+	int direction;
 	float speedLeft;  	// 左方向速度
 	float speedRight;  	// 右
 	float speedTop;  	// 上
 	float speedBottom ;  	// 下
+	boolean shooting_flag; // 控制玩家子弹输出
 };
 
 /* 墙壁 */
@@ -67,6 +73,7 @@ struct Wall{
 	int classify;
 	int life;
 	boolean active;
+	float get_shot_timer; // 被击中时为录入击中状态的时间
 };
 
 //==============================================================================
@@ -78,13 +85,14 @@ int newZombie(float ix, float iy);
 void move_zombie_classify1(struct Zombie* zombie , char* szName);
 void turnYellow( char *szName );
 void turnWhite( char *szName );
-void Disappear( struct Zombie* zombie );
+void zombieDisappear( struct Zombie* zombie ,char* szName);
 int newBullet(float ix, float iy, float idirection, float ispeed);
 void bulletMove( struct Bullet* bullet, char* szName);
-void playerShot();
-void playerMove();
+void playerShot( struct Player* player );
+void playerMove( struct Player* player, char* szName);
 int newWall(float ix, float iy, int classify);
 void wallMove(struct Wall* wall, char* szName);
+void bulletDisappear( struct Bullet* bullet,char* szName);
 
 //==============================================================================
 //
@@ -125,6 +133,13 @@ void wallMove(struct Wall* wall, char* szName);
 #define ZOMBIE_APPEAR_TIME 1.8
 #define BULLET_APPEAR_TIME 0.6
 #define ZOMBIE_HITTEN_TIME 0.3
+#define WALL_HITTEN_TIME 0.3
+
+// 发射间距
+#define GAP_BETWEEN_PLAYER_AND_BULLET 3
+
+// 游玩人数
+#define PLAYER_NUMBER 2
 //==============================================================================
 //
 // 声明全局变量
@@ -134,9 +149,7 @@ boolean GodMode = false;	//无敌模式（调试用）
 struct Bullet bullet[BULLET_MAX];	//预生成Bullet池
 struct Zombie zombie[ZOMBIE_MAX];	//预生成Zombie池
 struct Wall wall[WALL_MAX];
-struct Player player;
-
-int life; // 生命值
+struct Player player[PLAYER_NUMBER];
 
 float SCREEN_LEFT;    // 屏幕边界值
 float SCREEN_RIGHT;    
@@ -149,8 +162,15 @@ int score; // 分数
 int money; // 金钱
 
 // 控制旗
-boolean shooting_flag; // 控制玩家子弹输出
-
+/**
+ * 1: 开始页面
+ * 2：剧情模式
+ * 3：对战模式
+ * 4：无尽模式
+ * 5：游戏玩法
+ */
+int game_scene_flag;
+int current_scene_flag = 1;
 
 // 时间间隔计时器
 float zombie_appear_timer;
@@ -199,7 +219,7 @@ void GameMainLoop( float	fDeltaTime )
 		break;
 
 		// 游戏结束/等待按空格键开始
-	case 0:
+	case 0: g_iGameState = 1;
 	default:
 		break;
 	};
@@ -214,12 +234,12 @@ void GameInit()
 	dPlaySound("bgm_test1.ogg", 1, 1.0 );
 
 	// 初始化生命值 / 分数 / 金钱
-	life = LIFE_INIT;
 	money = 0;
 	score = 0;
 
 	// 初始化控制旗
-	shooting_flag = false;
+	game_scene_flag = 1;
+	current_scene_flag = 1;
 
 	// 初始化计数器 与 计时器
 	counter = 0;
@@ -243,6 +263,9 @@ void GameInit()
 		zombie[i].y = 0;
 		zombie[i].life = 0;
 		zombie[i].birthday = 0;
+		zombie[i].direction = 0;
+		zombie[i].speedX = 0;
+		zombie[i].speedY = 0;
 		zombie[i].active = false;
 		zombie[i].get_shot_timer = 0;
 	}
@@ -264,17 +287,23 @@ void GameInit()
 		wall[i].life = 0;
 		wall[i].classify = 1;
 		wall[i].active = false;
+		wall[i].get_shot_timer = 0;
 	}
 
 	// 初始化玩家
-	player.x = 0;
-	player.y = SCREEN_BOTTOM - 10;
-	player.direction = 90;
-	player.speedLeft = 0.f;  	// 左方向速度
-	player.speedRight = 0.f;  	// 右
-	player.speedTop = 0.f;  	// 上
-	player.speedBottom = 0.f;  	// 下
-	dSetSpritePosition("player",player.x,player.y);
+	for(i = 0;i < PLAYER_NUMBER;i++){
+		player[i].life = LIFE_INIT;
+		player[i].x = pow(-1,i)*SCREEN_RIGHT/2;
+		player[i].y = SCREEN_BOTTOM - 10;
+		player[i].id = i;
+		player[i].direction = 90;
+		player[i].speedLeft = 0.f;  	// 左方向速度
+		player[i].speedRight = 0.f;  	// 右
+		player[i].speedTop = 0.f;  	// 上
+		player[i].speedBottom = 0.f;  	// 下
+		player[i].shooting_flag = false;	
+	}
+	
 
 	// 共用字符串地址，避免资源浪费
 	char szName[64];
@@ -300,8 +329,14 @@ void GameInit()
 		dSetSpriteVisible(szName,0);
 	}
 
+	// 初始化player精灵
+	for(i = 0;i < PLAYER_NUMBER;i++){
+		sprintf(szName,"player_%d",i);
+		dSetSpritePosition( szName,player[i].x,player[i].y);
+	}
+	
 	// 随机创建地图上的墙壁
-	// for(i = 0;i < 10;i++){
+	// for(i = 0;i < 30;i++){
 	// 	float random1 = rand()%10/10.0*SCREEN_RIGHT*2 - SCREEN_RIGHT;
 	// 	float random2 = rand()%10/10.0*SCREEN_BOTTOM*2 - SCREEN_BOTTOM;
 	// 	newWall(random1,random2,1); // 完成框架前先把所有墙壁当作类型1
@@ -312,6 +347,16 @@ void GameInit()
 // 每局游戏进行中
 void GameRun( float fDeltaTime )
 {
+
+	// 判断游戏在哪个画面中
+	if( current_scene_flag == game_scene_flag){		
+	}else{
+		switch( game_scene_flag ){
+			case 1: dLoadMap("start.t2d");break;
+			case 2: dLoadMap("baseView.t2d");break;
+		}
+		current_scene_flag = game_scene_flag;
+	}
 	int i; // 循环控制变量
 
 	// 计时
@@ -320,6 +365,9 @@ void GameRun( float fDeltaTime )
 	bullet_appear_timer -= fDeltaTime;
 	for( i = 0;i < ZOMBIE_MAX;i++){
 		zombie[i].get_shot_timer -= fDeltaTime;
+	}
+	for( i = 0;i < WALL_MAX;i++){
+		wall[i].get_shot_timer -= fDeltaTime;
 	}
 
 	// 以相等的间隔激活Zombie
@@ -330,16 +378,20 @@ void GameRun( float fDeltaTime )
 
 	// 以相等的间隔发射Bullet
 	// 需满足 1. 空格键弹起 2. 0.5秒的子弹装填时间 才可以发射子弹
-	if ( shooting_flag == true){
+	for( i = 0;i < PLAYER_NUMBER;i++){
+
+		if ( player[i].shooting_flag == true){
 		if( bullet_appear_timer < 0){
-			playerShot();
-			shooting_flag = false;
+			playerShot( &player[i] );
+			player[i].shooting_flag = false;
 			bullet_appear_timer = BULLET_APPEAR_TIME;
 		}
 		else{
-			shooting_flag = false;
+			player[i].shooting_flag = false;
 		}
 	}
+	}
+	
 
 	// 各个对象各自执行它们的行为
 	Move();
@@ -366,7 +418,15 @@ void OnMouseMove( const float fMouseX, const float fMouseY )
 // 参数 fMouseX, fMouseY：为鼠标当前坐标
 void OnMouseClick( const int iMouseType, const float fMouseX, const float fMouseY )
 {
-	
+	if( iMouseType == 0 ){
+		float left = dGetSpritePositionX("start") - dGetSpriteWidth("start")/2;
+		float right = dGetSpritePositionX("start") + dGetSpriteWidth("start")/2;
+		float top = dGetSpritePositionY("start") - dGetSpriteHeight("start")/2;
+		float bottom = dGetSpritePositionY("start") - dGetSpriteHeight("start")/2;
+		if( (fMouseX > left)&&(fMouseX < right)&&(fMouseY > top)&&(fMouseY < bottom)){
+			game_scene_flag = 2;
+		}
+	}
 }
 //==========================================================================
 //
@@ -385,30 +445,51 @@ void OnMouseUp( const int iMouseType, const float fMouseX, const float fMouseY )
 void OnKeyDown( const int iKey, const bool bAltPress, const bool bShiftPress, const bool bCtrlPress )
 {	
 	//  空格键进入游戏
-	if( KEY_SPACE == iKey && 0 == g_iGameState )
-	{
-		g_iGameState =	1;
-	}
+	// if( KEY_SPACE == iKey && 0 == g_iGameState )
+	// {
+	// 	g_iGameState =	1;
+		
+	// }
 
 	// 控制主角移动
 	switch(iKey)
 	{
 		case KEY_UP:		
-			player.speedTop = -10.f;
+			player[0].speedTop = -8.f;
 			break;
 		case KEY_LEFT:
-			player.speedLeft = -15.f;		
+			player[0].speedLeft = -10.f;		
 			break;
 		case KEY_DOWN:	
-			player.speedBottom = 10.f;
+			player[0].speedBottom = 8.f;
 			break;
 		case KEY_RIGHT:
-			player.speedRight = 15.f;		
+			player[0].speedRight = 10.f;		
 			break;
 		default:
 			break;
 	}
-	dSetSpriteLinearVelocity("player", player.speedLeft + player.speedRight, player.speedTop + player.speedBottom);
+	dSetSpriteLinearVelocity("player_0", player[0].speedLeft + player[0].speedRight, player[0].speedTop + player[0].speedBottom);
+
+	// 控制主角移动
+	switch(iKey)
+	{
+		case KEY_W:		
+			player[1].speedTop = -8.f;
+			break;
+		case KEY_A:
+			player[1].speedLeft = -10.f;		
+			break;
+		case KEY_S:	
+			player[1].speedBottom = 8.f;
+			break;
+		case KEY_D:
+			player[1].speedRight = 10.f;		
+			break;
+		default:
+			break;
+	}
+	dSetSpriteLinearVelocity("player_1", player[1].speedLeft + player[1].speedRight, player[1].speedTop + player[1].speedBottom);
 
 }
 //==========================================================================
@@ -419,25 +500,47 @@ void OnKeyUp( const int iKey )
 {
 	if(iKey == KEY_SPACE)
 	{
-		shooting_flag = true;
+		player[0].shooting_flag = true;
+	}
+
+	if(iKey == KEY_G)
+	{
+		player[1].shooting_flag = true;
 	}
 
 	switch(iKey)
 	{
 		case KEY_UP:		
-			player.speedTop = 0.f;
+			player[0].speedTop = 0.f;
 			break;
 		case KEY_LEFT:
-			player.speedLeft = 0.f;		
+			player[0].speedLeft = 0.f;		
 			break;
 		case KEY_DOWN:	
-			player.speedBottom = 0.f;
+			player[0].speedBottom = 0.f;
 			break;
 		case KEY_RIGHT:
-			player.speedRight = 0.f;		
+			player[0].speedRight = 0.f;		
 			break;		
 	}
-	dSetSpriteLinearVelocity("player", player.speedLeft + player.speedRight, player.speedTop + player.speedBottom);
+	dSetSpriteLinearVelocity("player_0", player[0].speedLeft + player[0].speedRight, player[0].speedTop + player[0].speedBottom);
+
+	switch(iKey)
+	{
+		case KEY_W:		
+			player[1].speedTop = 0.f;
+			break;
+		case KEY_A:
+			player[1].speedLeft = 0.f;		
+			break;
+		case KEY_S:	
+			player[1].speedBottom = 0.f;
+			break;
+		case KEY_D:
+			player[1].speedRight = 0.f;		
+			break;		
+	}
+	dSetSpriteLinearVelocity("player_1", player[1].speedLeft + player[1].speedRight, player[1].speedTop + player[1].speedBottom);
 }
 //===========================================================================
 //
@@ -451,35 +554,39 @@ void OnSpriteColSprite( const char *szSrcName, const char *szTarName )
 	char szName_bullet[64];
 	char szName_zombie[64];
 	char szName_wall[64];
+	boolean activeflag = false;
 	for(i = 0;i < BULLET_MAX;i++){
 		if(!bullet[i].active){
 			continue;
 		}		
 		sprintf(szName_bullet,"bullet_%d",i);
 		if( !strcmp(szSrcName, szName_bullet) ){
-			bullet->active = false;
-			dSetSpriteVisible(szName_bullet,0);
-		}
-		for(j = 0;j < ZOMBIE_MAX;j++){
-			if(!zombie[j].active){
-				continue;
-			}	
- 			sprintf(szName_zombie,"zombie_%d",j);
-			if( !strcmp(szTarName, szName_zombie) ){
-				zombie[j].life--;
-				zombie[j].get_shot_timer = ZOMBIE_HITTEN_TIME;
+			for(j = 0;j < ZOMBIE_MAX;j++){
+				if(!zombie[j].active){
+					continue;
+				}	
+				sprintf(szName_zombie,"zombie_%d",j);
+				if( !strcmp(szTarName, szName_zombie) ){
+					zombie[j].life--;
+					zombie[j].get_shot_timer = ZOMBIE_HITTEN_TIME;
+					activeflag = true;
+				}
 			}
-		}
-		for(j = 0;j < WALL_MAX;j++){
-			if(!wall[j].active){
-				continue;
+			for(j = 0;j < WALL_MAX;j++){
+				if(!wall[j].active){
+					continue;
+				}
+				sprintf(szName_wall,"wall_%d",j);
+				if( !strcmp(szTarName,szName_wall) ){
+					wall[j].life--;
+					wall[j].get_shot_timer = WALL_HITTEN_TIME;
+					activeflag = true;
+				}
 			}
-			sprintf(szName_wall,"wall_%d",j);
-			if( !strcmp(szTarName,szName_wall) ){
-				wall[j].life--;
-				// wall[j].get_shot_timer = WALL_HITTEN_TIME;
+			if( activeflag == true ){
+				bulletDisappear(&bullet[i],szName_bullet);
 			}
-		}
+		}		
 	}
 	
 	
@@ -535,12 +642,22 @@ void Move() {
 		if( !wall[i].active ){
 			continue;
 		}
+		// 被击中的Wall显黄色
+		if( wall[i].get_shot_timer > 0 ){
+			turnYellow(szName);
+		}else{
+			turnWhite(szName);
+		}
 		sprintf(szName,"wall_%d",i);
-		wallMove( &wall[i],szName);
+		wallMove( &wall[i],szName );
 	}
 	
 	// player 行为
-	playerMove();
+	for(i = 0;i <PLAYER_NUMBER;i++){
+		sprintf(szName,"player_%d",i);
+		playerMove( &player[i],szName );
+	}
+	
 	
 }
 
@@ -561,6 +678,7 @@ int newZombie(float ix, float iy){
 			zombie[i].y = iy;
 			zombie[i].classify = 1; // 完成框架前，先把所有僵尸当作种类1
 			zombie[i].life = ZOMBIE_TYPE1_LIFE;	
+			zombie[i].direction = 270;
  			zombie[i].active = true;
 			zombie[i].birthday = counter;
 
@@ -580,7 +698,7 @@ int newZombie(float ix, float iy){
  * Zombie挂掉
  * 消失了
  */
-void Disappear( struct Zombie* zombie , char* szName ){
+void zombieDisappear( struct Zombie* zombie , char* szName ){
 	zombie->active = false;
 	dSetSpriteVisible(szName,0);
 }
@@ -595,20 +713,98 @@ void move_zombie_classify1(struct Zombie* zombie , char* szName){
 	// 同步位置
 	zombie->x = dGetSpritePositionX(szName);
 	zombie->y = dGetSpritePositionY(szName);
+	// zombie->direction = zombie->x
 
+	float deltaX[2];
+	float deltaY[2];
+	float delta[2];
+	float speedY;
+	float speedX;
 	// 朝着人方向走
-	float deltaX = player.x - zombie->x ;
-	float deltaY = player.y - zombie->y ;
-	float delta = sqrt( (deltaX*deltaX) + (deltaY*deltaY) );
-	float speedY = (deltaY / delta) * ZOMBIE_TYPE1_SPEED;
-	float speedX = (deltaX / delta) * ZOMBIE_TYPE1_SPEED;
+	for(int i = 0;i < PLAYER_NUMBER;i++){
+		deltaX[i] = player[i].x - zombie->x;
+		deltaY[i] = player[i].y - zombie->y;
+		delta[i] = sqrt( (deltaX[i]*deltaX[i]) + (deltaY[i]*deltaY[i]) );
+	}
+	if(delta[0] <= delta[1]){
+		speedY = (deltaY[0] / delta[0]) * ZOMBIE_TYPE1_SPEED;
+		speedX = (deltaX[0] / delta[0]) * ZOMBIE_TYPE1_SPEED;	
+	}else{
+		speedY = (deltaY[1] / delta[1]) * ZOMBIE_TYPE1_SPEED;
+		speedX = (deltaX[1] / delta[1]) * ZOMBIE_TYPE1_SPEED;	
+	}
+
+	// 判断一下是否撞墙
+	// int i;
+	// char szName_wall[64];
+	// for(i = 0;i < WALL_MAX;i++){
+	// 	if( !wall[i].active ){
+	// 		continue;
+	// 	}
+	// 	sprintf(szName_wall,"wall_%d",i);
+	// 	float gapX = dGetSpriteWidth(szName_wall)/2 + dGetSpriteWidth(szName)/2;
+	// 	float gapY = dGetSpriteHeight(szName_wall)/2 + dGetSpriteHeight(szName)/2;
+	// 	if((zombie->y - wall[i].y) < gapY){
+	// 		speedY = 0;
+	// 		// if( wall[i].get_shot_timer < 0){
+	// 		// 	wall[i].life--;
+	// 		// 	wall[i].get_shot_timer = WALL_HITTEN_TIME;
+	// 		// }			
+	// 	}else if((zombie->x - wall[i].x) < gapX){
+	// 		speedX = 0;
+	// 		// if( wall[i].get_shot_timer < 0){
+	// 		// 	wall[i].life--;
+	// 		// 	wall[i].get_shot_timer = WALL_HITTEN_TIME;
+	// 		// }	
+	// 	}
+	// }	
+	zombie->speedX = speedX;
+	zombie->speedY = speedY;
 	dSetSpriteLinearVelocityY( szName, speedY );
-	dSetSpriteLinearVelocityX( szName, speedX );	
+	dSetSpriteLinearVelocityX( szName, speedX );
 
 	// 判断是否死亡
 	if( zombie->life <= 0){
-		Disappear(zombie,szName);
+		zombieDisappear(zombie,szName);
 	}
+
+	if(abs((int)speedY) > abs((int)speedX)){
+		if( speedY > 0){
+			// 方向向下
+			if(zombie->direction == 270){
+				return;
+			}
+			zombie->direction = 270;
+			dAnimateSpritePlayAnimation( szName, "zombie1Animation3", 0);
+		}else{
+			// 方向向上
+			if(zombie->direction == 90){
+				return;
+			}
+			zombie->direction = 90;
+			dAnimateSpritePlayAnimation( szName, "zombie1Animation2", 0);
+		}
+	}else if(abs((int)speedX) > abs((int)speedY)){
+		if( speedX > 0 ){
+			// 方向向右
+			if(zombie->direction == 0){
+				return;
+			}
+			zombie->direction = 0;
+			dAnimateSpritePlayAnimation( szName,"zombie1Animation",0);
+		}else{
+			// 方向向左
+			if(zombie->direction == 180){
+				return;
+			}
+			zombie->direction = 180;
+			dAnimateSpritePlayAnimation( szName,"zombie1Animation1",0);
+		}
+	}
+
+		
+
+	
 }
 
 //===========================================================================
@@ -676,6 +872,14 @@ void bulletMove( struct Bullet* bullet ,char* szName){
 		dSetSpriteVisible(szName,0);
 	}
 }
+
+/**
+ * Bullet消失
+ */
+void bulletDisappear( struct Bullet* bullet , char* szName ){
+	bullet->active = false;
+	dSetSpriteVisible(szName,0);
+}
 //===========================================================================
 //
 // 关于 墙壁 的函数
@@ -695,7 +899,7 @@ int newWall(float ix, float iy, int classify){
 			wall[i].x = ix;
 			wall[i].y = iy;
 			wall[i].classify = classify; 
-			wall[i].life = ZOMBIE_TYPE1_LIFE;	// 完成框架前，先将所有墙壁当作种类1
+			wall[i].life = WALL_TYPE1_LIFE;	// 完成框架前，先将所有墙壁当作种类1
  			wall[i].active = true;
 
 			// 外部显示		
@@ -711,6 +915,7 @@ int newWall(float ix, float iy, int classify){
 
 /* 墙壁的行为 */
 void wallMove(struct Wall* wall, char* szName){
+
 	if( wall->life <= 0){
 		wall->active = false;
 		dSetSpriteVisible(szName,0);
@@ -722,52 +927,111 @@ void wallMove(struct Wall* wall, char* szName){
 // 关于玩家行为的函数
 
 /* 玩家发射子弹 */
-void playerShot() {	
-	if(life > 0){
-		dPlaySound("gun_type1.wav", 0, 1 );
-		newBullet(player.x, player.y,player.direction,BULLET_TYPE1_SPEED);
+void playerShot(Player* player) {	
+	if( player->life > 0){
+		int shootX;
+		int shootY;
+		char szName[64];
+		sprintf(szName,"player_%d",player->id);
+		switch ( player->direction ){
+			case 0: // 朝右开枪
+				shootX = player->x + dGetSpriteWidth( szName )/2 + GAP_BETWEEN_PLAYER_AND_BULLET; 
+				shootY = player->y;
+				break; 
+			case 45: // 朝右上方开枪
+				shootX = player->x + dGetSpriteWidth( szName )/2 + GAP_BETWEEN_PLAYER_AND_BULLET;
+				shootY = player->y + dGetSpriteHeight( szName )/2 + GAP_BETWEEN_PLAYER_AND_BULLET;
+				break;
+			case 90: // 朝上开枪
+				shootX = player->x;
+				shootY = player->y - dGetSpriteHeight( szName )/2 - GAP_BETWEEN_PLAYER_AND_BULLET;
+				break;
+			case 135: // 朝左上方开枪
+				shootX = player->x - dGetSpriteWidth( szName )/2 - GAP_BETWEEN_PLAYER_AND_BULLET;
+				shootY = player->y - dGetSpriteHeight( szName )/2 - GAP_BETWEEN_PLAYER_AND_BULLET;
+				break;
+			case 180: // 朝左开枪
+				shootX = player->x - dGetSpriteHeight( szName )/2 - GAP_BETWEEN_PLAYER_AND_BULLET;
+				shootY = player->y;
+				break;
+			case 225: // 朝左下方开枪
+				shootX = player->x - dGetSpriteWidth( szName )/2 - GAP_BETWEEN_PLAYER_AND_BULLET;
+				shootY = player->y + dGetSpriteHeight( szName )/2 + GAP_BETWEEN_PLAYER_AND_BULLET;
+				break;
+			case 270: // 朝下开枪
+				shootX = player->x;
+				shootY = player->y + dGetSpriteHeight( szName )/2 + GAP_BETWEEN_PLAYER_AND_BULLET;
+				break;
+			case 315: // 朝右下方开枪
+				shootX = player->x + dGetSpriteWidth( szName )/2 + GAP_BETWEEN_PLAYER_AND_BULLET;
+				shootY = player->y + dGetSpriteHeight( szName )/2 + GAP_BETWEEN_PLAYER_AND_BULLET;
+				break;
+		}
+		dPlaySound("gun_type1.wav", 0, 1 );	
+		newBullet(
+			shootX, 
+			shootY,
+			player->direction,
+			BULLET_TYPE1_SPEED
+		);
 	}	
 }
 
-/* 玩家行为*/
-void playerMove(){
+/* 玩家行为 */
+void playerMove( struct Player* player, char* szName){
 	// 同步位置
-	player.x = dGetSpritePositionX("player");
-	player.y = dGetSpritePositionY("player");
+	player->x = dGetSpritePositionX(szName);
+	player->y = dGetSpritePositionY(szName);
 
+	// 根据玩家的不同获取朝向的不同 
+	char left[64];
+	char right[64];
+	char bottom[64];
+	char top[64];
+	if(player->id == 0){
+		sprintf(left,"player%dAnimation1",player->id+1);
+		sprintf(right,"player%dAnimation2",player->id+1);
+		sprintf(bottom,"player%dAnimation3",player->id+1);
+		sprintf(top,"player%dAnimation",player->id+1);
+	}else if(player->id == 1){
+		sprintf(left,"player%dAnimation1",player->id+1);
+		sprintf(right,"player%dAnimation",player->id+1);
+		sprintf(bottom,"player%dAnimation3",player->id+1);
+		sprintf(top,"player%dAnimation2",player->id+1);
+	}
 	// 设置子弹发射方向、脸的朝向 
 	// 目前只设置了四个朝向，之后增加
-	if(abs((int)(player.speedBottom + player.speedTop)) > abs((int)(player.speedLeft + player.speedRight))){
-		if( (player.speedBottom + player.speedTop) > 0){
+	if(abs((int)(player->speedBottom + player->speedTop)) > abs((int)(player->speedLeft + player->speedRight))){
+		if( (player->speedBottom + player->speedTop) > 0){
 			// 方向向下
-			if(player.direction == 270){
+			if(player->direction == 270){
 				return;
 			}
-			player.direction = 270;
-			dAnimateSpritePlayAnimation( "player", "player_testAnimation", 0);
+			player->direction = 270;
+			dAnimateSpritePlayAnimation( szName, bottom, 0);
 		}else{
 			// 方向向上
-			if(player.direction == 90){
+			if(player->direction == 90){
 				return;
 			}
-			player.direction = 90;
-			dAnimateSpritePlayAnimation( "player", "player_testAnimation3", 0);
+			player->direction = 90;
+			dAnimateSpritePlayAnimation( szName,top, 0);
 		}
-	}else if(abs((int)(player.speedBottom + player.speedTop)) < abs((int)(player.speedLeft + player.speedRight))){
-		if((player.speedLeft + player.speedRight) > 0){
+	}else if(abs((int)(player->speedBottom + player->speedTop)) < abs((int)(player->speedLeft + player->speedRight))){
+		if((player->speedLeft + player->speedRight) > 0){
 			// 方向向右
-			if(player.direction == 0){
+			if(player->direction == 0){
 				return;
 			}
-			player.direction = 0;
-			dAnimateSpritePlayAnimation("player","player_testAnimation2",0);
+			player->direction = 0;
+			dAnimateSpritePlayAnimation(szName,right,0);
 		}else{
 			// 方向向左
-			if(player.direction == 180){
+			if(player->direction == 180){
 				return;
 			}
-			player.direction = 180;
-			dAnimateSpritePlayAnimation("player","player_testAnimation1",0);
+			player->direction = 180;
+			dAnimateSpritePlayAnimation(szName,left,0);
 		}
 	}
 }
