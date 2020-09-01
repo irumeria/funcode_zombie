@@ -1,7 +1,7 @@
-//-------------------------- 8/31/2020 -- 10:34:04 -----
+//-------------------------- 9/1/2020 -- 22:54:35 -----
 Processor Init:
-   Intel (unknown, Pentium Pro/II/III family), ~2.00 Ghz
-     (timed at roughly 1.99 Ghz)
+   Intel (unknown, Pentium Pro/II/III family), ~1.95 Ghz
+     (timed at roughly 1.97 Ghz)
    FPU detected
    MMX detected
    SSE detected
@@ -121,12 +121,6 @@ Activating DirectInput...
 DirectInput joystick failed to enable!
 Compiling G:/FunCode/Games/Zombie/Bin/game/data/levels/baseView.t2d...
 Loading compiled script G:/FunCode/Games/Zombie/Bin/game/data/levels/baseView.t2d.
-t2dSceneGraph::addToScene() - Object '1322' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1323' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1324' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1325' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1326' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1327' is already in a SceneGraph!.
 t2dSceneGraph::addToScene() - Object '1328' is already in a SceneGraph!.
 t2dSceneGraph::addToScene() - Object '1329' is already in a SceneGraph!.
 t2dSceneGraph::addToScene() - Object '1330' is already in a SceneGraph!.
@@ -451,6 +445,12 @@ t2dSceneGraph::addToScene() - Object '1648' is already in a SceneGraph!.
 t2dSceneGraph::addToScene() - Object '1649' is already in a SceneGraph!.
 t2dSceneGraph::addToScene() - Object '1650' is already in a SceneGraph!.
 t2dSceneGraph::addToScene() - Object '1651' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1652' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1653' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1654' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1655' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1656' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1657' is already in a SceneGraph!.
 DirectInput deactivated.
 Shutting down the OpenGL display device...
 Making the GL rendering context not current...
