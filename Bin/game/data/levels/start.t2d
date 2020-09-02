@@ -37,11 +37,11 @@
       cameraPosition = "0 0";
       cameraSize = "100 75";
 
-   new t2dStaticSprite(start) {
+   new t2dStaticSprite() {
       imageMap = "beijingImageMap";
       frame = "0";
       useSourceRect = "0";
-      sourceRect = "0 0 0 0";
+      sourceRect = "0 0 2.37252e-039 6.22898e-039";
       canSaveDynamicFields = "1";
       Position = "3.420 -0.435";
       size = "146.840 79.130";
@@ -49,16 +49,31 @@
       WorldLimitMax = "50.000 37.500";
          mountID = "2";
    };
-   new t2dStaticSprite() {
+   new t2dStaticSprite(start) {
       imageMap = "startImageMap";
       frame = "0";
       useSourceRect = "0";
-      sourceRect = "0 0 0 0";
+      sourceRect = "0 0 2.37252e-039 6.22898e-039";
       canSaveDynamicFields = "1";
       Position = "-3.433 11.330";
       size = "26.865 10.218";
       WorldLimitMin = "-50.000 -37.500";
       WorldLimitMax = "50.000 37.500";
+      CollisionActiveReceive = "1";
          mountID = "3";
+   };
+   new t2dStaticSprite(cursor) {
+      imageMap = "PlayerPic09ImageMap";
+      frame = "0";
+      useSourceRect = "0";
+      sourceRect = "0 0 0 0";
+      canSaveDynamicFields = "1";
+      Visible = "0";
+      Position = "14.667 -41.190";
+      size = "2.777 2.379";
+      WorldLimitMin = "-50.000 -37.500";
+      WorldLimitMax = "50.000 37.500";
+      CollisionActiveSend = "1";
+         mountID = "4";
    };
 };

@@ -1,4 +1,4 @@
-//-------------------------- 9/1/2020 -- 22:54:35 -----
+//-------------------------- 9/2/2020 -- 11:40:01 -----
 Processor Init:
    Intel (unknown, Pentium Pro/II/III family), ~1.95 Ghz
      (timed at roughly 1.97 Ghz)
@@ -119,24 +119,12 @@ Loading compiled script G:/FunCode/Games/Zombie/Bin/game/gui/mainScreen.gui.
 Loading compiled script G:/FunCode/Games/Zombie/Bin/game/gameScripts/game.cs.
 Activating DirectInput...
 DirectInput joystick failed to enable!
+Compiling G:/FunCode/Games/Zombie/Bin/game/data/levels/start.t2d...
+Loading compiled script G:/FunCode/Games/Zombie/Bin/game/data/levels/start.t2d.
+Compiling G:/FunCode/Games/Zombie/Bin/game/data/levels/start.t2d...
+Loading compiled script G:/FunCode/Games/Zombie/Bin/game/data/levels/start.t2d.
 Compiling G:/FunCode/Games/Zombie/Bin/game/data/levels/baseView.t2d...
 Loading compiled script G:/FunCode/Games/Zombie/Bin/game/data/levels/baseView.t2d.
-t2dSceneGraph::addToScene() - Object '1328' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1329' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1330' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1331' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1332' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1333' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1334' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1335' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1336' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1337' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1338' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1339' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1340' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1341' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1342' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1343' is already in a SceneGraph!.
 t2dSceneGraph::addToScene() - Object '1344' is already in a SceneGraph!.
 t2dSceneGraph::addToScene() - Object '1345' is already in a SceneGraph!.
 t2dSceneGraph::addToScene() - Object '1346' is already in a SceneGraph!.
@@ -451,6 +439,22 @@ t2dSceneGraph::addToScene() - Object '1654' is already in a SceneGraph!.
 t2dSceneGraph::addToScene() - Object '1655' is already in a SceneGraph!.
 t2dSceneGraph::addToScene() - Object '1656' is already in a SceneGraph!.
 t2dSceneGraph::addToScene() - Object '1657' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1658' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1659' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1660' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1661' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1662' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1663' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1664' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1665' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1666' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1667' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1668' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1669' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1670' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1671' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1672' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1673' is already in a SceneGraph!.
 DirectInput deactivated.
 Shutting down the OpenGL display device...
 Making the GL rendering context not current...
