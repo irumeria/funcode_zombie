@@ -169,8 +169,9 @@ int money; // 金钱
  * 4：无尽模式
  * 5：游戏玩法
  */
-int game_scene_flag;
-int current_scene_flag = 1;
+int game_scene_flag = 1;
+int current_scene_flag = 0;
+boolean click_flag = false;
 
 // 时间间隔计时器
 float zombie_appear_timer;
@@ -191,12 +192,14 @@ float bullet_appear_timer;
 // 函数参数fDeltaTime : 上次调用本函数到此次调用本函数的时间间隔，单位：秒
 void GameMainLoop( float	fDeltaTime )
 {
+	
+
 	switch( g_iGameState )
 	{
 		// 初始化游戏，清空上一局相关数据
 	case 1:
 		{
-			GameInit();
+			
 			g_iGameState	=	2; // 初始化之后，将游戏状态设置为进行中
 		}
 		break;
@@ -207,7 +210,18 @@ void GameMainLoop( float	fDeltaTime )
 			// TODO 修改此处游戏循环条件，完成正确游戏逻辑
 			if( true )
 			{
-				GameRun( fDeltaTime );
+				// 判断游戏在哪个画面中
+				if( current_scene_flag == game_scene_flag ){							
+				}else{
+					switch( game_scene_flag ){
+						case 1: dLoadMap("start.t2d");break;
+						case 2: dLoadMap("baseView.t2d"); GameInit(); break;
+					}
+					current_scene_flag = game_scene_flag;
+				}
+				if( game_scene_flag == 2){
+					GameRun( fDeltaTime );
+				}
 			}
 			else
 			{
@@ -238,8 +252,6 @@ void GameInit()
 	score = 0;
 
 	// 初始化控制旗
-	game_scene_flag = 1;
-	current_scene_flag = 1;
 
 	// 初始化计数器 与 计时器
 	counter = 0;
@@ -254,7 +266,6 @@ void GameInit()
 
 	// 循环控制变量	
 	int i;
-
 
 	// 初始化zombie
 	for(i = 0; i < ZOMBIE_MAX; i++) {
@@ -346,17 +357,7 @@ void GameInit()
 //
 // 每局游戏进行中
 void GameRun( float fDeltaTime )
-{
-
-	// 判断游戏在哪个画面中
-	if( current_scene_flag == game_scene_flag){		
-	}else{
-		switch( game_scene_flag ){
-			case 1: dLoadMap("start.t2d");break;
-			case 2: dLoadMap("baseView.t2d");break;
-		}
-		current_scene_flag = game_scene_flag;
-	}
+{	
 	int i; // 循环控制变量
 
 	// 计时
@@ -409,7 +410,7 @@ void GameEnd()
 // 参数 fMouseX, fMouseY：为鼠标当前坐标
 void OnMouseMove( const float fMouseX, const float fMouseY )
 {
-	
+	dSetSpritePosition("cursor",fMouseX,fMouseY);
 }
 //==========================================================================
 //
@@ -419,13 +420,7 @@ void OnMouseMove( const float fMouseX, const float fMouseY )
 void OnMouseClick( const int iMouseType, const float fMouseX, const float fMouseY )
 {
 	if( iMouseType == 0 ){
-		float left = dGetSpritePositionX("start") - dGetSpriteWidth("start")/2;
-		float right = dGetSpritePositionX("start") + dGetSpriteWidth("start")/2;
-		float top = dGetSpritePositionY("start") - dGetSpriteHeight("start")/2;
-		float bottom = dGetSpritePositionY("start") - dGetSpriteHeight("start")/2;
-		if( (fMouseX > left)&&(fMouseX < right)&&(fMouseY > top)&&(fMouseY < bottom)){
-			game_scene_flag = 2;
-		}
+		click_flag = true;
 	}
 }
 //==========================================================================
@@ -435,7 +430,9 @@ void OnMouseClick( const int iMouseType, const float fMouseX, const float fMouse
 // 参数 fMouseX, fMouseY：为鼠标当前坐标
 void OnMouseUp( const int iMouseType, const float fMouseX, const float fMouseY )
 {
-	
+	if( iMouseType == 0 ){
+		click_flag = false;
+	}
 }
 //==========================================================================
 //
@@ -549,6 +546,14 @@ void OnKeyUp( const int iKey )
 // 参数 szTarName：被碰撞的精灵名字
 void OnSpriteColSprite( const char *szSrcName, const char *szTarName )
 {
+	// 先检测鼠标精灵碰撞事件
+	// 鼠标事件1：从场景1切换至场景2，开始剧情模式
+	if( click_flag ){
+		if( !strcmp(szSrcName, "cursor") && !strcmp(szTarName, "start") ){
+			game_scene_flag = 2;
+		}
+	}
+
 	int i; // i,j为循环控制变量
 	int j;
 	char szName_bullet[64];
@@ -861,6 +866,9 @@ int newBullet(float ix, float iy, float idirection, float ispeed) {
 	return -1;
 }
 
+/**
+ * 子弹行为
+ */
 void bulletMove( struct Bullet* bullet ,char* szName){
 	// 同步位置
 	bullet->x = dGetSpritePositionX(szName);

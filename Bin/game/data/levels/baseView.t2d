@@ -112,4 +112,17 @@
       CollisionResponseMode = "CLAMP";
          mountID = "7";
    };
+   new t2dStaticSprite(cursor) {
+      imageMap = "PlayerPic09ImageMap";
+      frame = "0";
+      useSourceRect = "0";
+      sourceRect = "0 0 2.37252e-039 6.22898e-039";
+      canSaveDynamicFields = "1";
+      Visible = "0";
+      Position = "39.522 -55.998";
+      size = "3.800 4.000";
+      WorldLimitMin = "-50.000 -37.500";
+      WorldLimitMax = "50.000 37.500";
+         mountID = "8";
+   };
 };
