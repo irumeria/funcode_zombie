@@ -76,6 +76,16 @@ struct Wall{
 	float get_shot_timer; // 被击中时为录入击中状态的时间
 };
 
+/* 剧情节点 */
+struct Plot{
+	int id; 
+	char* speaker; // 说话者名字
+	char* content; // 说话的内容
+	int picture1; // 对应的立绘
+	int picture2;
+	boolean end_flag;
+};
+
 //==============================================================================
 //
 // 声明函数
@@ -85,6 +95,7 @@ int newZombie(float ix, float iy);
 void move_zombie_classify1(struct Zombie* zombie , char* szName);
 void turnYellow( char *szName );
 void turnWhite( char *szName );
+void turnGray( char *szName );
 void zombieDisappear( struct Zombie* zombie ,char* szName);
 int newBullet(float ix, float iy, float idirection, float ispeed);
 void bulletMove( struct Bullet* bullet, char* szName);
@@ -93,6 +104,8 @@ void playerMove( struct Player* player, char* szName);
 int newWall(float ix, float iy, int classify);
 void wallMove(struct Wall* wall, char* szName);
 void bulletDisappear( struct Bullet* bullet,char* szName);
+void loadPlots();
+void playPlots( float fDeltaTime );
 
 //==============================================================================
 //
@@ -140,6 +153,26 @@ void bulletDisappear( struct Bullet* bullet,char* szName);
 
 // 游玩人数
 #define PLAYER_NUMBER 2
+
+// 人物名字
+#define BOY "罗吉"
+#define GIRL "爱斯卡"
+
+// 人物表情对应的帧数
+#define BOY_NORMAL 0
+#define BOY_NERVOUS 1
+#define BOY_BAD 2
+#define BOY_SCARED 3
+#define BOY_CRY 4
+#define GIRL_NORMAL 0
+#define GIRL_CURIOUS 1
+#define GIRL_HAPPY 2
+
+// 游戏中的各种状态
+#define MAIN_GAME 1
+#define TALKING 2
+#define SHOPPING 3
+
 //==============================================================================
 //
 // 声明全局变量
@@ -148,8 +181,12 @@ boolean GodMode = false;	//无敌模式（调试用）
 
 struct Bullet bullet[BULLET_MAX];	//预生成Bullet池
 struct Zombie zombie[ZOMBIE_MAX];	//预生成Zombie池
-struct Wall wall[WALL_MAX];
-struct Player player[PLAYER_NUMBER];
+struct Wall wall[WALL_MAX];  //预生成Wall池
+struct Player player[PLAYER_NUMBER];  
+
+struct Plot plot[100]; // 生成剧情链条
+int current_plot;
+int currnet_plot_ensure;
 
 float SCREEN_LEFT;    // 屏幕边界值
 float SCREEN_RIGHT;    
@@ -161,8 +198,11 @@ int counter; // 全局计时器
 int score; // 分数
 int money; // 金钱
 
+
 // 控制旗
+
 /**
+ * 场景控制旗
  * 1: 开始页面
  * 2：剧情模式
  * 3：对战模式
@@ -171,14 +211,20 @@ int money; // 金钱
  */
 int game_scene_flag = 1;
 int current_scene_flag = 0;
-boolean click_flag = false;
+
+/**
+ * 状态控制旗
+ * MAIN_GAME 1 游戏中状态
+ * TALKING 2 剧情对话播放状态
+ * SHOPPING 3 自动售货机购物中状态
+ */
+int game_mode_flag;
+
+boolean click_flag = false; // 检测鼠标点击
 
 // 时间间隔计时器
 float zombie_appear_timer;
 float bullet_appear_timer;
-
-//==============================================================================
-
 
 //==============================================================================
 //
@@ -190,7 +236,7 @@ float bullet_appear_timer;
 // 游戏主循环，此函数将被不停的调用，引擎每刷新一次屏幕，此函数即被调用一次
 // 用以处理游戏的开始、进行中、结束等各种状态. 
 // 函数参数fDeltaTime : 上次调用本函数到此次调用本函数的时间间隔，单位：秒
-void GameMainLoop( float	fDeltaTime )
+void GameMainLoop( float fDeltaTime )
 {
 	
 
@@ -198,9 +244,8 @@ void GameMainLoop( float	fDeltaTime )
 	{
 		// 初始化游戏，清空上一局相关数据
 	case 1:
-		{
-			
-			g_iGameState	=	2; // 初始化之后，将游戏状态设置为进行中
+		{		
+			g_iGameState = 2; // 初始化之后，将游戏状态设置为进行中
 		}
 		break;
 
@@ -215,12 +260,17 @@ void GameMainLoop( float	fDeltaTime )
 				}else{
 					switch( game_scene_flag ){
 						case 1: dLoadMap("start.t2d");break;
-						case 2: dLoadMap("baseView.t2d"); GameInit(); break;
+						case 2: dLoadMap("baseView.t2d"); GameInit();loadPlots(); break;
 					}
 					current_scene_flag = game_scene_flag;
 				}
 				if( game_scene_flag == 2){
-					GameRun( fDeltaTime );
+					if(game_mode_flag == MAIN_GAME){
+						GameRun( fDeltaTime );
+					}
+					if(game_mode_flag == TALKING){
+						playPlots( fDeltaTime );
+					}				
 				}
 			}
 			else
@@ -263,6 +313,11 @@ void GameInit()
 	SCREEN_RIGHT = dGetScreenRight(); 
 	SCREEN_TOP = dGetScreenTop();
 	SCREEN_BOTTOM = dGetScreenBottom();
+
+	// 先进入剧情模式
+	game_mode_flag = TALKING;
+	current_plot = 0;
+	currnet_plot_ensure = -1;
 
 	// 循环控制变量	
 	int i;
@@ -419,9 +474,6 @@ void OnMouseMove( const float fMouseX, const float fMouseY )
 // 参数 fMouseX, fMouseY：为鼠标当前坐标
 void OnMouseClick( const int iMouseType, const float fMouseX, const float fMouseY )
 {
-	if( iMouseType == 0 ){
-		click_flag = true;
-	}
 }
 //==========================================================================
 //
@@ -431,7 +483,7 @@ void OnMouseClick( const int iMouseType, const float fMouseX, const float fMouse
 void OnMouseUp( const int iMouseType, const float fMouseX, const float fMouseY )
 {
 	if( iMouseType == 0 ){
-		click_flag = false;
+		click_flag = true;
 	}
 }
 //==========================================================================
@@ -549,6 +601,7 @@ void OnSpriteColSprite( const char *szSrcName, const char *szTarName )
 	// 先检测鼠标精灵碰撞事件
 	// 鼠标事件1：从场景1切换至场景2，开始剧情模式
 	if( click_flag ){
+		click_flag = false;
 		if( !strcmp(szSrcName, "cursor") && !strcmp(szTarName, "start") ){
 			game_scene_flag = 2;
 		}
@@ -1043,7 +1096,155 @@ void playerMove( struct Player* player, char* szName){
 		}
 	}
 }
+//===========================================================================
+//
+// 与剧情有关的函数
 
+/* 载入剧情 */
+void loadPlots(){
+	plot[0].id = 0;
+	plot[0].speaker = BOY;
+	plot[0].content = "没想到竟然被传送到未来去了";
+	plot[0].picture1 = BOY_NERVOUS;
+	plot[0].picture2 = GIRL_NORMAL;
+	plot[0].end_flag = false;
+
+	plot[1].id = 1;
+	plot[1].speaker = GIRL;
+	plot[1].content = "还好是来到了未来，要是去到远古时代都没有奶茶都没得喝了";
+	plot[1].picture1 = BOY_NERVOUS;
+	plot[1].picture2 = GIRL_HAPPY;
+	plot[1].end_flag = false;
+
+	plot[2].id = 2;
+	plot[2].speaker = BOY;
+	plot[2].content = "欸你还有心情喝奶茶…";
+	plot[2].picture1 = BOY_NERVOUS;
+	plot[2].picture2 = GIRL_HAPPY;
+	plot[2].end_flag = false;
+
+	plot[3].id = 3;
+	plot[3].speaker = BOY;
+	plot[3].content = "欸哪来的奶茶!";
+	plot[3].picture1 = BOY_SCARED;
+	plot[3].picture2 = GIRL_HAPPY;
+	plot[3].end_flag = false;
+	
+	plot[4].id = 4;
+	plot[4].speaker = GIRL;
+	plot[4].content = "刚才自动贩卖机里面卖的来着";
+	plot[4].picture1 = BOY_SCARED;
+	plot[4].picture2 = GIRL_CURIOUS;
+	plot[4].end_flag = false;
+
+	plot[5].id = 5;
+	plot[5].speaker = BOY;
+	plot[5].content = "啊，完全没看见！话说回来，未来世界怎么完全看不见人影啊";
+	plot[5].picture1 = BOY_NERVOUS;
+	plot[5].picture2 = GIRL_CURIOUS;
+	plot[5].end_flag = false;
+
+	plot[6].id = 6;
+	plot[6].speaker = GIRL;
+	plot[6].content = "僵尸倒有不少";
+	plot[6].picture1 = BOY_NORMAL;
+	plot[6].picture2 = GIRL_HAPPY;
+	plot[6].end_flag = false;
+
+	plot[7].id = 7;
+	plot[7].speaker = BOY;
+	plot[7].content = "真的欸";
+	plot[7].picture1 = BOY_CRY;
+	plot[7].picture2 = GIRL_HAPPY;
+	plot[7].end_flag = false;
+
+	plot[8].id = 8;
+	plot[8].speaker = GIRL;
+	plot[8].content = "拿上这个";
+	plot[8].picture1 = BOY_NERVOUS;
+	plot[8].picture2 = GIRL_NORMAL;
+	plot[8].end_flag = false;
+
+	plot[9].id = 9;
+	plot[9].speaker = BOY;
+	plot[9].content = "这是…手枪，哪里来的啊";
+	plot[9].picture1 = BOY_SCARED;
+	plot[9].picture2 = GIRL_NORMAL;
+	plot[9].end_flag = false;
+
+	plot[10].id = 10;
+	plot[10].speaker = GIRL;
+	plot[10].content = "也是自动贩卖机里来的";
+	plot[10].picture1 = BOY_SCARED;
+	plot[10].picture2 = GIRL_HAPPY;
+	plot[10].end_flag = true;
+
+}
+
+/**
+ * 展示剧情 与GameRun同级的函数
+ */
+void playPlots( float fDeltaTime ){
+
+	// 检测节点是否跳转，是则更换展示内容
+	if( current_plot != currnet_plot_ensure){
+
+		currnet_plot_ensure = current_plot;
+
+		// 先让显示剧情的精灵可见
+		dSetSpriteVisible("boy",1);
+		dSetSpriteVisible("girl",1);
+		dSetSpriteVisible("panel",1);
+		dSetSpriteVisible("speaker",1);
+		dSetSpriteVisible("content",1);
+
+		// 设置click_flag 避免出现剧情错误被跳过
+		click_flag = false;
+
+		if( !strcmp(plot[current_plot].speaker,BOY) ){
+			turnWhite( "boy" );
+			turnGray( "girl" );
+		}
+		if( !strcmp(plot[current_plot].speaker,GIRL) ){
+			turnWhite( "girl" );
+			turnGray( "boy" );
+		}
+		dSetStaticSpriteFrame( "boy", plot[current_plot].picture1 );
+		dSetStaticSpriteFrame( "girl", plot[current_plot].picture2 );
+		dSetTextString( "speaker", plot[current_plot].speaker );
+		dSetTextString( "content", plot[current_plot].content );
+	}
+
+	// 检测是否点击屏幕，点击了则跳转节点
+	if( click_flag == true){
+		click_flag = false;
+		// 检测当前节点是否为这段剧情的最后一个节点
+		if( plot[current_plot].end_flag ){
+			current_plot++;
+			// 做一个退出特效
+			dCloneSprite("boy","boy_show");
+			dCloneSprite("girl","girl_show");
+			dCloneSprite("panel","panel_show");
+			dSetSpriteLinearVelocityX("boy_show",-70);
+			dSetSpriteLinearVelocityX("girl_show",70);
+			dSetSpriteLinearVelocityY("panel_show",60);
+			dSetSpriteLifeTime("boy_show",3);
+			dSetSpriteLifeTime("girl_show",3);
+			dSetSpriteLifeTime("panel_show",3);
+
+			// 播放结束让显示剧情的精灵不可见
+			dSetSpriteVisible("boy",0);
+			dSetSpriteVisible("girl",0);
+			dSetSpriteVisible("panel",0);
+			dSetSpriteVisible("speaker",0);
+			dSetSpriteVisible("content",0);
+			game_mode_flag = MAIN_GAME;
+		}else{
+			current_plot++;
+		}
+	}
+	
+}
 //===========================================================================
 //
 // API 的使用简化函数
@@ -1064,4 +1265,12 @@ void turnWhite( char *szName ){
 	dSetSpriteColorBlue( szName, 255 );
 	dSetSpriteColorRed( szName, 255 );
 	dSetSpriteColorGreen( szName, 255 );
+}
+/**
+ * 将精灵变成灰色调
+ */
+void turnGray( char *szName ){
+	dSetSpriteColorBlue( szName, 150 );
+	dSetSpriteColorRed( szName, 150 );
+	dSetSpriteColorGreen( szName, 150 );
 }
