@@ -1,7 +1,7 @@
-//-------------------------- 9/3/2020 -- 15:32:15 -----
+//-------------------------- 9/5/2020 -- 15:19:38 -----
 Processor Init:
-   Intel (unknown, Pentium Pro/II/III family), ~2.00 Ghz
-     (timed at roughly 1.99 Ghz)
+   Intel (unknown, Pentium Pro/II/III family), ~1.95 Ghz
+     (timed at roughly 1.96 Ghz)
    FPU detected
    MMX detected
    SSE detected
@@ -123,44 +123,12 @@ Compiling G:/FunCode/Games/Zombie/Bin/game/data/levels/baseView.t2d...
 Loading compiled script G:/FunCode/Games/Zombie/Bin/game/data/levels/baseView.t2d.
 Compiling G:/FunCode/Games/Zombie/Bin/game/data/levels/start.t2d...
 Loading compiled script G:/FunCode/Games/Zombie/Bin/game/data/levels/start.t2d.
+DirectInput deactivated.
+Activating DirectInput...
+DirectInput deactivated.
+Activating DirectInput...
 Compiling G:/FunCode/Games/Zombie/Bin/game/data/levels/baseView.t2d...
 Loading compiled script G:/FunCode/Games/Zombie/Bin/game/data/levels/baseView.t2d.
-t2dSceneGraph::addToScene() - Object '1361' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1362' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1363' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1364' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1365' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1366' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1367' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1368' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1369' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1370' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1371' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1372' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1373' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1374' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1375' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1376' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1377' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1378' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1379' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1380' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1381' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1382' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1383' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1384' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1385' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1386' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1387' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1388' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1389' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1390' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1391' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1392' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1393' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1394' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1395' is already in a SceneGraph!.
-t2dSceneGraph::addToScene() - Object '1396' is already in a SceneGraph!.
 t2dSceneGraph::addToScene() - Object '1397' is already in a SceneGraph!.
 t2dSceneGraph::addToScene() - Object '1398' is already in a SceneGraph!.
 t2dSceneGraph::addToScene() - Object '1399' is already in a SceneGraph!.
@@ -458,6 +426,74 @@ t2dSceneGraph::addToScene() - Object '1690' is already in a SceneGraph!.
 t2dSceneGraph::addToScene() - Object '1691' is already in a SceneGraph!.
 t2dSceneGraph::addToScene() - Object '1692' is already in a SceneGraph!.
 t2dSceneGraph::addToScene() - Object '1693' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1694' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1695' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1696' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1697' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1698' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1699' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1700' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1701' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1702' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1703' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1704' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1705' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1706' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1707' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1708' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1709' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1710' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1711' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1712' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1713' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1714' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1715' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1716' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1717' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1718' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1719' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1720' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1721' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1722' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1723' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1724' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1725' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1726' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1727' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1728' is already in a SceneGraph!.
+t2dSceneGraph::addToScene() - Object '1729' is already in a SceneGraph!.
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dSceneGraph::addToScene() - Object '1730' is already in a SceneGraph!.
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dSceneGraph::addToScene() - Object '1731' is already in a SceneGraph!.
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dSceneGraph::addToScene() - Object '1732' is already in a SceneGraph!.
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dSceneGraph::addToScene() - Object '1733' is already in a SceneGraph!.
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+t2dStaticSprite::setImageMap() - Invalid Frame #1 for t2dImageMapDatablock Datablock! (bulletImageMap)
+DirectInput deactivated.
+Activating DirectInput...
 DirectInput deactivated.
 Shutting down the OpenGL display device...
 Making the GL rendering context not current...

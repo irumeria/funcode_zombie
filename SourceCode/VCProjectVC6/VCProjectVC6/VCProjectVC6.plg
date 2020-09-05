@@ -7,72 +7,85 @@
 </h3>
 <h3>Command Lines</h3>
 Creating command line "rc.exe /l 0x804 /fo"Debug/VCTemplate.res" /d "_DEBUG" "G:\FunCode\Games\Zombie\SourceCode\VCProjectVC6\VCProjectVC6\VCTemplate.rc"" 
-Creating temporary file "C:\Users\gnl84\AppData\Local\Temp\RSPD881.tmp" with contents
+Creating temporary file "C:\Users\gnl84\AppData\Local\Temp\RSP3053.tmp" with contents
 [
 /nologo /MLd /W3 /Gm /GX /ZI /Od /I "../../Header" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /Fp"Debug/VCProjectVC6.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
 "G:\FunCode\Games\Zombie\SourceCode\Src\LessonX.cpp"
 "G:\FunCode\Games\Zombie\SourceCode\Src\Main.cpp"
 ]
-Creating command line "cl.exe @C:\Users\gnl84\AppData\Local\Temp\RSPD881.tmp" 
-Creating temporary file "C:\Users\gnl84\AppData\Local\Temp\RSPD882.tmp" with contents
+Creating command line "cl.exe @C:\Users\gnl84\AppData\Local\Temp\RSP3053.tmp" 
+Creating temporary file "C:\Users\gnl84\AppData\Local\Temp\RSP3054.tmp" with contents
 [
 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib Winmm.lib ..\..\Src\CommonAPI_VC6.Lib /nologo /subsystem:windows /incremental:no /pdb:"Debug/Game.pdb" /debug /machine:I386 /out:"..\..\..\Bin\Game.exe" /pdbtype:sept 
 .\Debug\LessonX.obj
 .\Debug\Main.obj
 .\Debug\VCTemplate.res
 ]
-Creating command line "link.exe @C:\Users\gnl84\AppData\Local\Temp\RSPD882.tmp"
+Creating command line "link.exe @C:\Users\gnl84\AppData\Local\Temp\RSP3054.tmp"
 <h3>Output Window</h3>
 Compiling resources...
 Compiling...
 LessonX.cpp
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(308) : warning C4305: '=' : truncation from 'const double' to 'float'
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(309) : warning C4305: '=' : truncation from 'const double' to 'float'
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(362) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(419) : warning C4244: '+=' : conversion from 'float' to 'int', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(431) : warning C4305: '=' : truncation from 'const double' to 'float'
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(432) : warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(439) : warning C4805: '==' : unsafe mix of type 'unsigned char' and type 'const bool' in operation
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(443) : warning C4305: '=' : truncation from 'const double' to 'float'
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(629) : warning C4305: '=' : truncation from 'const double' to 'float'
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(640) : warning C4305: '=' : truncation from 'const double' to 'float'
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(644) : warning C4805: '==' : unsafe mix of type 'unsigned char' and type 'const bool' in operation
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(741) : warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(785) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(788) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(789) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(791) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(792) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(879) : warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(879) : warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(879) : warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(896) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(897) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(903) : warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(904) : warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(913) : warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(913) : warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(914) : warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(999) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1000) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1003) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1004) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1007) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1008) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1011) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1012) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1015) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1016) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1019) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1020) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1023) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1024) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1027) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1028) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1037) : warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1037) : warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1037) : warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1219) : warning C4805: '==' : unsafe mix of type 'unsigned char' and type 'const bool' in operation
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(326) : warning C4305: '=' : truncation from 'const double' to 'float'
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(327) : warning C4305: '=' : truncation from 'const double' to 'float'
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(391) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(440) : warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(441) : warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(474) : warning C4305: '=' : truncation from 'const double' to 'float'
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(475) : warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(481) : warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(487) : warning C4805: '==' : unsafe mix of type 'unsigned char' and type 'const bool' in operation
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(491) : warning C4305: '=' : truncation from 'const double' to 'float'
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(564) : warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(594) : warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(638) : warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(664) : warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(715) : warning C4305: '=' : truncation from 'const double' to 'float'
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(726) : warning C4305: '=' : truncation from 'const double' to 'float'
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(730) : warning C4805: '==' : unsafe mix of type 'unsigned char' and type 'const bool' in operation
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(735) : warning C4804: '>' : unsafe use of type 'bool' in operation
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(741) : warning C4305: '=' : truncation from 'const double' to 'float'
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(746) : warning C4805: '==' : unsafe mix of type 'unsigned char' and type 'const bool' in operation
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(763) : warning C4305: '=' : truncation from 'const double' to 'float'
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(914) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(917) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(918) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(920) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(921) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(981) : warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1051) : warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1059) : warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1060) : warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1061) : warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1078) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1079) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1086) : warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1087) : warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1096) : warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1096) : warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1102) : warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1187) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1188) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1191) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1192) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1195) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1196) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1199) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1200) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1203) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1204) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1207) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1208) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1211) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1212) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1215) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1216) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1226) : warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1226) : warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1226) : warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1265) : warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1307) : warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+g:\funcode\games\zombie\sourcecode\src\lessonx.cpp(1561) : warning C4805: '==' : unsafe mix of type 'unsigned char' and type 'const bool' in operation
 Main.cpp
 g:\funcode\games\zombie\sourcecode\src\main.cpp(82) : warning C4800: 'const int' : forcing value to bool 'true' or 'false' (performance warning)
 g:\funcode\games\zombie\sourcecode\src\main.cpp(82) : warning C4800: 'const int' : forcing value to bool 'true' or 'false' (performance warning)

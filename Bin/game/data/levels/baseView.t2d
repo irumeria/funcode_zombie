@@ -37,19 +37,6 @@
       cameraPosition = "0 0";
       cameraSize = "100 75";
 
-   new t2dStaticSprite() {
-      imageMap = "L3_BackGroundImageMap";
-      frame = "0";
-      useSourceRect = "0";
-      sourceRect = "2.36005e-039 0 2.36005e-039 6.22898e-039";
-      canSaveDynamicFields = "1";
-      Position = "0.750 -0.520";
-      size = "108.500 78.959";
-      Layer = "3";
-      WorldLimitMin = "-50.000 -37.500";
-      WorldLimitMax = "50.000 37.500";
-         mountID = "2";
-   };
    new t2dStaticSprite(bullet) {
       imageMap = "bulletImageMap";
       frame = "0";
@@ -62,7 +49,8 @@
       WorldLimitMin = "-50.000 -37.500";
       WorldLimitMax = "50.000 37.500";
       CollisionActiveSend = "1";
-         mountID = "3";
+      CollisionResponseMode = "CUSTOM";
+         mountID = "2";
    };
    new t2dStaticSprite(wall) {
       imageMap = "DandanTarget1ImageMap";
@@ -72,51 +60,57 @@
       canSaveDynamicFields = "1";
       Position = "3.230 -44.447";
       size = "3.541 5.715";
-      Layer = "2";
+      Layer = "4";
       WorldLimitMin = "-50.000 -37.500";
       WorldLimitMax = "50.000 37.500";
       CollisionActiveReceive = "1";
-      CollisionPhysicsSend = "1";
-         mountID = "4";
+      CollisionPhysicsReceive = "1";
+         mountID = "3";
    };
    new t2dAnimatedSprite(player_0) {
       animationName = "player1Animation";
       canSaveDynamicFields = "1";
       Position = "11.774 -4.851";
       size = "3.549 6.211";
-      Layer = "2";
+      Layer = "3";
       WorldLimitMin = "-50.000 -37.500";
-      WorldLimitMax = "50.000 37.500";
+      WorldLimitMax = "50.000 37.924";
+      CollisionActiveSend = "1";
       CollisionActiveReceive = "1";
+      CollisionPhysicsSend = "1";
       CollisionPhysicsReceive = "1";
-      CollisionResponseMode = "STICKY";
-         mountID = "5";
+      CollisionResponseMode = "CUSTOM";
+         mountID = "4";
    };
    new t2dAnimatedSprite(zombie) {
       animationName = "zombie1Animation3";
       canSaveDynamicFields = "1";
       Position = "-30.545 -46.495";
       size = "3.949 7.010";
-      Layer = "2";
+      Layer = "3";
       WorldLimitMin = "-50.000 -37.500";
       WorldLimitMax = "50.000 37.500";
+      CollisionActiveSend = "1";
       CollisionActiveReceive = "1";
+      CollisionPhysicsSend = "1";
       CollisionPhysicsReceive = "1";
-      CollisionResponseMode = "STICKY";
-         mountID = "6";
+      CollisionResponseMode = "CUSTOM";
+         mountID = "5";
    };
    new t2dAnimatedSprite(player_1) {
       animationName = "player2Animation2";
       canSaveDynamicFields = "1";
       Position = "18.985 -4.339";
       size = "3.549 6.211";
-      Layer = "2";
+      Layer = "3";
       WorldLimitMin = "-50.000 -37.500";
       WorldLimitMax = "50.000 37.500";
+      CollisionActiveSend = "1";
       CollisionActiveReceive = "1";
+      CollisionPhysicsSend = "1";
       CollisionPhysicsReceive = "1";
-      CollisionResponseMode = "CLAMP";
-         mountID = "7";
+      CollisionResponseMode = "CUSTOM";
+         mountID = "6";
    };
    new t2dStaticSprite(cursor) {
       imageMap = "PlayerPic09ImageMap";
@@ -129,7 +123,7 @@
       size = "3.800 4.000";
       WorldLimitMin = "-50.000 -37.500";
       WorldLimitMax = "50.000 37.500";
-         mountID = "8";
+         mountID = "7";
    };
    new t2dStaticSprite(panel) {
       imageMap = "REP_CURSORImageMap";
@@ -141,11 +135,11 @@
       size = "94.618 20.453";
       WorldLimitMin = "-50.000 -37.500";
       WorldLimitMax = "50.000 37.500";
-         mountID = "9";
+         mountID = "8";
    };
    new t2dStaticSprite(boy) {
       imageMap = "boy_1ImageMap11";
-      frame = "0";
+      frame = "1";
       useSourceRect = "0";
       sourceRect = "2.36005e-039 0 2.36005e-039 6.22898e-039";
       canSaveDynamicFields = "1";
@@ -154,7 +148,7 @@
       Layer = "1";
       WorldLimitMin = "-50.000 -37.500";
       WorldLimitMax = "50.000 37.500";
-         mountID = "10";
+         mountID = "9";
    };
    new t2dStaticSprite(girl) {
       imageMap = "girl_1ImageMap1";
@@ -167,7 +161,7 @@
       Layer = "1";
       WorldLimitMin = "-50.000 -37.500";
       WorldLimitMax = "50.000 37.500";
-         mountID = "11";
+         mountID = "10";
    };
    new t2dTextObject(speaker) {
       canSaveDynamicFields = "1";
@@ -192,7 +186,7 @@
       snapToInteger = "0";
       noUnicode = "0";
          hideOverlap = "0";
-         mountID = "12";
+         mountID = "11";
    };
    new t2dTextObject(Content) {
       canSaveDynamicFields = "1";
@@ -217,6 +211,32 @@
       snapToInteger = "0";
       noUnicode = "0";
          hideOverlap = "0";
+         mountID = "12";
+   };
+   new t2dStaticSprite(blood) {
+      imageMap = "bloodImageMap";
+      frame = "0";
+      useSourceRect = "0";
+      sourceRect = "2.36005e-039 0 2.36005e-039 6.22898e-039";
+      canSaveDynamicFields = "1";
+      Position = "32.145 -43.487";
+      size = "7.253 6.974";
+      Layer = "5";
+      WorldLimitMin = "-50.000 -37.500";
+      WorldLimitMax = "50.000 37.500";
          mountID = "13";
+   };
+   new t2dStaticSprite() {
+      imageMap = "backgroundImageMap";
+      frame = "0";
+      useSourceRect = "0";
+      sourceRect = "2.36005e-039 0 2.36005e-039 6.22898e-039";
+      canSaveDynamicFields = "1";
+      Position = "-0.269 -2.500";
+      size = "100.539 95.000";
+      Layer = "6";
+      WorldLimitMin = "-50.000 -37.500";
+      WorldLimitMax = "50.000 37.500";
+         mountID = "14";
    };
 };
