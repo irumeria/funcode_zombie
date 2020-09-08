@@ -63,7 +63,6 @@
       CollisionActiveSend = "1";
       CollisionActiveReceive = "1";
       CollisionPhysicsSend = "1";
-      CollisionPhysicsReceive = "1";
       CollisionResponseMode = "CUSTOM";
          mountID = "3";
    };
@@ -78,7 +77,6 @@
       CollisionActiveSend = "1";
       CollisionActiveReceive = "1";
       CollisionPhysicsSend = "1";
-      CollisionPhysicsReceive = "1";
       CollisionResponseMode = "CUSTOM";
          mountID = "4";
    };
@@ -92,7 +90,6 @@
       WorldLimitMax = "50.000 37.500";
       CollisionActiveSend = "1";
       CollisionActiveReceive = "1";
-      CollisionPhysicsSend = "1";
       CollisionPhysicsReceive = "1";
       CollisionResponseMode = "CUSTOM";
          mountID = "5";
@@ -263,19 +260,20 @@
       Layer = "3";
       WorldLimitMin = "-50.000 -37.500";
       WorldLimitMax = "50.000 37.500";
+      CollisionResponseMode = "CUSTOM";
          mountID = "16";
    };
-   new t2dTextObject() {
+   new t2dTextObject(moneytext) {
       canSaveDynamicFields = "1";
-      Position = "-40.655 -33.977";
-      size = "8.690 4.089";
+      Position = "-43.134 -33.977";
+      size = "3.732 4.089";
       Layer = "2";
       WorldLimitMin = "-50.000 -37.500";
       WorldLimitMax = "50.000 37.500";
-      text = "xxxxx";
+      text = "x0";
       font = "Arial";
       wordWrap = "0";
-      hideOverflow = "1";
+      hideOverflow = "0";
       textAlign = "Left";
       lineHeight = "4.08932";
       aspectRatio = "1";
