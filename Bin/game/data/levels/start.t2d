@@ -41,7 +41,7 @@
       imageMap = "coverImageMap";
       frame = "0";
       useSourceRect = "0";
-      sourceRect = "0 0 0 0";
+      sourceRect = "2.37773e-039 0 2.37773e-039 6.22898e-039";
       canSaveDynamicFields = "1";
       Position = "-1.274 -0.074";
       size = "114.590 79.853";
@@ -53,7 +53,7 @@
       imageMap = "startImageMap";
       frame = "0";
       useSourceRect = "0";
-      sourceRect = "0 0 0 0";
+      sourceRect = "2.37773e-039 0 2.37773e-039 6.22898e-039";
       canSaveDynamicFields = "1";
       Position = "-18.305 26.600";
       size = "10.566 10.566";
@@ -66,9 +66,9 @@
       imageMap = "stateImageMap";
       frame = "0";
       useSourceRect = "0";
-      sourceRect = "0 0 0 0";
+      sourceRect = "2.37773e-039 0 2.37773e-039 6.22898e-039";
       canSaveDynamicFields = "1";
-      Position = "17.362 26.984";
+      Position = "-1.951 26.951";
       size = "13.902 13.902";
       WorldLimitMin = "-50.000 -37.500";
       WorldLimitMax = "50.000 37.500";
@@ -79,13 +79,26 @@
       imageMap = "PlayerPic09ImageMap";
       frame = "0";
       useSourceRect = "0";
-      sourceRect = "0 0 0 0";
+      sourceRect = "2.37773e-039 0 2.37773e-039 6.22898e-039";
       canSaveDynamicFields = "1";
+      Visible = "0";
       Position = "36.525 -49.436";
       size = "4.711 4.711";
       WorldLimitMin = "-50.000 -37.500";
       WorldLimitMax = "50.000 37.500";
       CollisionActiveSend = "1";
          mountID = "5";
+   };
+   new t2dStaticSprite(exit) {
+      imageMap = "exitImageMap";
+      frame = "0";
+      useSourceRect = "0";
+      sourceRect = "0 0 2.37773e-039 6.22898e-039";
+      canSaveDynamicFields = "1";
+      Position = "17.888 27.029";
+      size = "10.977 10.977";
+      WorldLimitMin = "-50.000 -37.500";
+      WorldLimitMax = "50.000 37.500";
+         mountID = "6";
    };
 };
