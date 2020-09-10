@@ -67,6 +67,7 @@ struct Player{
 	float speedBottom;
 	boolean shooting_flag; // 控制玩家子弹输出
 	float bitten_timer; // 人被咬了之后开始计时
+	float bullet_appear_timer;// 人发射子弹的间隔
 	Zombie* bit_zombie; // 咬人的僵尸
 };
 
@@ -135,12 +136,12 @@ void moneyMove( struct Money* money,char* szName );
 
 //单位最大数量设定
 #define ZOMBIE_MAX 150
-#define BULLET_MAX 50
+#define BULLET_MAX 100
 #define WALL_MAX 150
 #define MONEY_MAX 30
 
 // 玩家最大速度设定
-#define PLAYER_SPEED 10
+#define PLAYER_SPEED 14
 
 // 子弹速度设定
 #define BULLET_TYPE1_SPEED 150.0
@@ -166,7 +167,7 @@ void moneyMove( struct Money* money,char* szName );
 // 各种类僵尸初始生命值设定
 #define ZOMBIE_TYPE1_LIFE 2
 #define ZOMBIE_TYPE2_LIFE 6
-#define ZOMBIE_TYPE3_LIFE 10
+#define ZOMBIE_TYPE3_LIFE 15
 
 // 僵尸被杀死后money的掉落率 0~10
 #define MONEY_APPEAR_RATE 4
@@ -183,7 +184,7 @@ void moneyMove( struct Money* money,char* szName );
 #define ZOMBIE_HITTEN_TIME 0.3
 #define WALL_HITTEN_TIME 0.3
 #define PLAYER_BITTEN_TIME 0.1
-#define ZOMBIE_FIRE_TIME 2
+#define ZOMBIE_FIRE_TIME 4
 
 // 发射间距
 #define GAP_BETWEEN_PLAYER_AND_BULLET 1
@@ -237,6 +238,7 @@ float counter; // 全局计时器
 
 int myMoney; // 金钱
 
+int boss_zombie; // boss僵尸的ID，便于操作
 
 // 控制旗
 
@@ -263,9 +265,9 @@ boolean click_flag = false; // 检测鼠标点击
 
 
 boolean boss_flag; // 出现boss
+
 // 时间间隔计时器
 float zombie_appear_timer;
-float bullet_appear_timer;
 
 //==============================================================================
 //
@@ -352,10 +354,14 @@ void GameMainLoop( float fDeltaTime )
 void GameInit()
 {
 	// 不同关卡的分支操作
-	if( game_scene_flag == 2){
+	if( game_scene_flag == 2 ){
 
 		// 先播个音乐
 		bgmID = dPlaySound("bgm_test1.ogg", 1, 1.0 );
+
+		// 隐藏一些东西
+		dSetSpriteVisible("bossname",0);
+		dSetSpriteVisible("bloodline",0);
 
 		// 初始化生命值 / 分数 / 金钱
 		myMoney = 0;
@@ -363,7 +369,6 @@ void GameInit()
 		// 初始化计数器 与 计时器
 		counter = 20;
 		zombie_appear_timer = ZOMBIE_APPEAR_TIME;
-		bullet_appear_timer = BULLET_APPEAR_TIME;
 
 		// 去到剧情开始
 		current_plot = 0;
@@ -378,17 +383,19 @@ void GameInit()
 		// 初始化计数器 与 计时器
 		counter = 20;
 		zombie_appear_timer = ZOMBIE_APPEAR_TIME*2;
-		bullet_appear_timer = BULLET_APPEAR_TIME;
 	}else if( game_scene_flag == 4){
 
 		// 先播个音乐
 		dStopSound( bgmID );
 		bgmID = dPlaySound("bgm_test3.ogg", 1, 1.0 );
 
+		// 使最终boss的数据显现
+		dSetSpriteVisible("bloodline",1);
+		dSetSpriteVisible("bossname",1);
+
 		// 初始化计数器 与 计时器
 		// counter = 60;
 		zombie_appear_timer = ZOMBIE_APPEAR_TIME*3;
-		bullet_appear_timer = BULLET_APPEAR_TIME;
 	}
 	
 
@@ -478,6 +485,7 @@ void GameInit()
 		player[i].shooting_flag = false;	
 		player[i].bitten_timer = 0;
 		player[i].bit_zombie = NULL;
+		player[i].bullet_appear_timer = BULLET_APPEAR_TIME;
 	}
 	
 
@@ -517,6 +525,8 @@ void GameInit()
 	for(i = 0;i < PLAYER_NUMBER;i++){
 		sprintf(szName,"player_%d",i);
 		dSetSpritePosition( szName,player[i].x,player[i].y );
+		dSetSpriteVisible(szName,1);
+		dSetSpriteEnable(szName,1);
 	}
 
 	// 初始化money精灵
@@ -545,7 +555,6 @@ void GameRun( float fDeltaTime )
 	// 计时
 	counter -= fDeltaTime;	
 	zombie_appear_timer -= fDeltaTime;
-	bullet_appear_timer -= fDeltaTime;
 	for( i = 0;i < ZOMBIE_MAX;i++){
 		zombie[i].get_shot_timer -= fDeltaTime;
 		if(zombie[i].classify == 2){
@@ -560,6 +569,7 @@ void GameRun( float fDeltaTime )
 	}
 	for( i = 0;i < PLAYER_NUMBER;i++){
 		player[i].bitten_timer -= fDeltaTime;
+		player[i].bullet_appear_timer -= fDeltaTime;
 	}
 	for( i = 0;i < MONEY_MAX;i++){
 		money[i].get_timer -= fDeltaTime;
@@ -600,7 +610,7 @@ void GameRun( float fDeltaTime )
 		// 以相等的间隔激活Zombie
 		if( counter >= 0){
 			if( zombie_appear_timer < 0 ){
-				zombie_appear_timer = ZOMBIE_APPEAR_TIME*2;
+				zombie_appear_timer = ZOMBIE_APPEAR_TIME*2.5;
 				newZombie(SCREEN_RIGHT*2*(rand()%10/10.0) - SCREEN_RIGHT, SCREEN_TOP,1); // 在画面顶部生成一下测试用僵尸
 				newZombie(SCREEN_RIGHT, SCREEN_BOTTOM*2*(rand()%10/10.0) - SCREEN_BOTTOM,1); // 在画面左部生成一下测试用僵尸
 				newZombie(SCREEN_LEFT, SCREEN_BOTTOM*2*(rand()%10/10.0) - SCREEN_BOTTOM,1); // 在画面右部生成一下测试用僵尸
@@ -611,7 +621,6 @@ void GameRun( float fDeltaTime )
 			boss_flag = true;
 			newZombie(SCREEN_RIGHT*2*(rand()%10/10.0) - SCREEN_RIGHT, SCREEN_TOP,2);
 			newZombie(SCREEN_RIGHT*2*(rand()%10/10.0) - SCREEN_RIGHT, SCREEN_TOP,2);	
-			newZombie(SCREEN_RIGHT*2*(rand()%10/10.0) - SCREEN_RIGHT, SCREEN_TOP,2);
 		}
 
 		// 进入下一关
@@ -625,20 +634,31 @@ void GameRun( float fDeltaTime )
 				}
 				if( next_flag == true ){
 					game_scene_flag = 4;
-					turnRed("map");
+					turnGray("map");
 				}			
 			}
 		}
 		
-	}else if( game_scene_flag == 4 ){
+	}else if( game_scene_flag == 4 ){	
 		if( boss_flag == false ){
-			boss_flag = true;
-			newZombie(SCREEN_RIGHT*2*(rand()%10/10.0) - SCREEN_RIGHT, SCREEN_TOP,3);
+			boss_flag = true; 
+			boss_zombie = newZombie(SCREEN_RIGHT*2*(rand()%10/10.0) - SCREEN_RIGHT, SCREEN_TOP,3);
 		}
+		// 在最终boss被干掉之前循环出现小僵尸
 		if( zombie_appear_timer < 0 ){
 			zombie_appear_timer = ZOMBIE_APPEAR_TIME*3;
 			newZombie(SCREEN_RIGHT, SCREEN_BOTTOM*2*(rand()%10/10.0) - SCREEN_BOTTOM,1); // 在画面左部生成一下测试用僵尸
 			newZombie(SCREEN_LEFT, SCREEN_BOTTOM*2*(rand()%10/10.0) - SCREEN_BOTTOM,1); // 在画面右部生成一下测试用僵尸
+		}
+
+		// boss血条扣血	
+		float less = zombie[boss_zombie].life*1.0/ZOMBIE_TYPE3_LIFE;
+		float totalLength = dGetSpriteWidth("bloodline");
+		float deltaLength = -(1.0-less)*totalLength;
+		dSetSpritePositionX("bloodline",SCREEN_LEFT+deltaLength+totalLength/2);
+
+		if( (boss_flag == true)&&(zombie[boss_zombie].active == false) ){
+			game_scene_flag = 1;
 		}
 	}
 	
@@ -647,16 +667,26 @@ void GameRun( float fDeltaTime )
 	// 需满足 1. 空格键弹起 2. 0.5秒的子弹装填时间 才可以发射子弹
 	for( i = 0;i < PLAYER_NUMBER;i++){
 		if ( player[i].shooting_flag == true){
-			if( bullet_appear_timer < 0){
+			if( player[i].bullet_appear_timer < 0){
 				playerShot( &player[i] );
 				player[i].shooting_flag = false;
-				bullet_appear_timer = BULLET_APPEAR_TIME;
+				player[i].bullet_appear_timer = BULLET_APPEAR_TIME;
 			}
 			else{
 				player[i].shooting_flag = false;
 			}
 		}
 	}
+
+	// 刷新玩家血量表
+	for(i = 0;i < PLAYER_NUMBER;i++){
+		char playerhp[64];
+		char hp[64];
+		sprintf(hp,"x%d",player[i].life);
+		sprintf(playerhp,"player%dhp",i+1);
+		dSetTextString(playerhp,hp);
+	}
+
 	// 各个对象各自执行它们的行为
 	Move();
 }
@@ -701,7 +731,7 @@ void OnMouseUp( const int iMouseType, const float fMouseX, const float fMouseY )
 void OnKeyDown( const int iKey, const bool bAltPress, const bool bShiftPress, const bool bCtrlPress )
 {	
 	// 控制主角移动
-	if( player[0].bit_zombie == NULL ){
+	if( (player[0].bit_zombie == NULL)&&(player[0].life > 0) ){
 		switch(iKey)
 		{
 			case KEY_UP:		
@@ -731,7 +761,7 @@ void OnKeyDown( const int iKey, const bool bAltPress, const bool bShiftPress, co
 	
 
 	// 控制主角移动
-	if( player[1].bit_zombie == NULL ){
+	if( (player[1].bit_zombie == NULL)&&(player[1].life > 0) ){
 		switch(iKey)
 		{
 			case KEY_W:		
@@ -777,7 +807,7 @@ void OnKeyUp( const int iKey )
 		player[1].shooting_flag = true;
 	}
 
-	if( player[0].bit_zombie == NULL ){
+	if( (player[0].bit_zombie == NULL)&&(player[0].life > 0) ){
 		switch(iKey)
 		{
 			case KEY_UP:		
@@ -803,7 +833,7 @@ void OnKeyUp( const int iKey )
 		);
 	}
 	
-	if( player[1].bit_zombie == NULL ){
+	if( (player[1].bit_zombie == NULL)&&(player[1].life > 0) ){
 		switch(iKey)
 		{
 			case KEY_W:		
@@ -864,7 +894,7 @@ void OnSpriteColSprite( const char *szSrcName, const char *szTarName )
 			// 玩家射出的子弹
 			if( bullet[i].classify == 1 ){
 				for(j = 0;j < ZOMBIE_MAX;j++){
-					if(!zombie[j].active){
+					if(!zombie[j].active){ 
 						continue;
 					}	
 					sprintf(szName_zombie,"zombie_%d",j);
@@ -898,6 +928,7 @@ void OnSpriteColSprite( const char *szSrcName, const char *szTarName )
 					if( !strcmp(szTarName, szName_player) ){
 						if( player[j].bitten_timer <= 0 ){
 							player[j].bitten_timer = PLAYER_BITTEN_TIME;
+							player[j].life--;
 							activeflag = true;
 						}
 					}
@@ -909,6 +940,7 @@ void OnSpriteColSprite( const char *szSrcName, const char *szTarName )
 			
 		}
 	}
+	// 僵尸攻击人
 	for( i = 0;i < ZOMBIE_MAX ;i++){
 		if( !zombie[i].active ){
 			continue;
@@ -924,6 +956,7 @@ void OnSpriteColSprite( const char *szSrcName, const char *szTarName )
 					if( player[j].bitten_timer <= 0 ){
 						player[j].bitten_timer = PLAYER_BITTEN_TIME;
 						player[j].bit_zombie = zombie;
+						player[j].life--;
 					}
 					dSetSpriteLinearVelocityY( szName_zombie, 0 );
 					dSetSpriteLinearVelocityX( szName_zombie, 0 );
@@ -932,25 +965,6 @@ void OnSpriteColSprite( const char *szSrcName, const char *szTarName )
 		}
 	}
 
-	// 玩家和金币碰撞
-	// for( i = 0;i < PLAYER_NUMBER ;i++){
-	// 	if( player->life < 0 ){
-	// 		continue;
-	// 	}
-	// 	sprintf(szName_player,"player_%d",i);
-	// 	if( !strcmp(szSrcName,szName_player) ){
-	// 		for(j = 0;j < MONEY_MAX;j++){
-	// 			if( !money[j].active ){
-	// 					continue;
-	// 			}
-	// 			sprintf(szName_money,"money_%d",j);
-	// 			if( !strcmp(szTarName, szName_money) ){
-	// 				getMoney( &money[j],szName_money );
-	// 			}
-	// 		}
-	// 	}
-
-	// }
 	
 }
 //===========================================================================
@@ -1053,6 +1067,7 @@ int newZombie(float ix, float iy,int classify){
 			dSetSpritePositionX(szName,zombie[i].x);
 			dSetSpritePositionY(szName,zombie[i].y);
 			dSetSpriteVisible(szName,1); 
+			dSetSpriteEnable(szName,1);
 			return i;
 		}
 	}
@@ -1075,6 +1090,7 @@ void zombieDisappear( struct Zombie* zombie , char* szName ){
 	// 僵尸消失
 	zombie->active = false;
 	dSetSpriteVisible(szName,0);
+	dSetSpriteEnable(szName,0);
 
 	// 一定概率产生money
 	if( rand()%10 < MONEY_APPEAR_RATE ){
@@ -1408,8 +1424,6 @@ int newMoney( float ix,float iy ){
 			dSetSpritePositionX(szName,ix);
 			dSetSpritePositionY(szName,iy);
 			dSetSpriteVisible(szName,1); 
-			// dSetSpriteCollisionReceive( szName, 1 );// 设置为可碰撞
-			// dSetSpriteCollisionPhysicsReceive( szName, 0 );
 
 			getMoney( money,szName );
 
@@ -1437,30 +1451,7 @@ void getMoney( struct Money* money,char* szName ){
 }
 /* 钱币行为，看下有没有特效可以做 */
 void moneyMove( struct Money* money,char* szName ){
-	// int i;
-	// char szName_player[64];
-	// 看下自己有没有被捡起来
-	// if( !money->get_flag ){
-	// 	for( i = 0;i < PLAYER_NUMBER ;i++){
-	// 		if( player->life < 0 ){
-	// 			continue;
-	// 		}
-	// 		sprintf(szName_player,"player_%d",i);
-	// 		float playerLeft = dGetSpritePositionX(szName_player) - dGetSpriteWidth(szName_player);
-	// 		float playerRight = dGetSpritePositionX(szName_player) + dGetSpriteWidth(szName_player);
-	// 		float playerTop = dGetSpritePositionY(szName_player) - dGetSpriteHeight(szName_player);
-	// 		float playerBottom = dGetSpritePositionY(szName_player) + dGetSpriteHeight(szName_player);
-	// 		if( // 判断钱币是否被玩家的坐标范围包围
-	// 			(money->x < playerRight)&&
-	// 			(money->x > playerLeft)&&
-	// 			(money->y > playerTop)&&
-	// 			(money->y < playerBottom)
-	// 			){
-	// 				getMoney( money,szName );
-	// 			}
-	// 		}
 
-	// 	}
 	// 被捡起来之后的特效
 	if( money->get_flag ){
 		if( money->get_timer > 0){
@@ -1539,14 +1530,21 @@ void playerShot(Player* player) {
 
 /* 玩家行为 */
 void playerMove( struct Player* player, char* szName){
+
+	if( player->life <= 0){
+		dSetSpriteEnable(szName,0);
+		dSetSpriteVisible(szName,0);
+		dSetSpriteLinearVelocity(szName,0,0);
+		return;
+	}
 	// 同步位置
 	player->x = dGetSpritePositionX(szName);
-	player->y = dGetSpritePositionY(szName);
+	player->y = dGetSpritePositionY(szName); 
 
 	// 处理一下玩家出界的问题
 	if(dGetSpritePositionY( szName ) < SCREEN_TOP){
 		dSetSpritePositionY( szName,SCREEN_TOP);
-	}
+	} 
 	if(dGetSpritePositionY( szName ) > SCREEN_BOTTOM){
 		dSetSpritePositionY(szName,SCREEN_BOTTOM);
 	}
