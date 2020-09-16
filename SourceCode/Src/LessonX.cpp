@@ -13,17 +13,17 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
 //
-int	g_iGameState = 0;		// æ¸¸æˆçŠ¶æ€ï¼Œ0 -- æ¸¸æˆç»“æŸç­‰å¾…å¼€å§‹çŠ¶æ€ï¼›1 -- æŒ‰ä¸‹ç©ºæ ¼é”®å¼€å§‹ï¼Œåˆå§‹åŒ–æ¸¸æˆï¼›2 -- æ¸¸æˆè¿›è¡Œä¸­
+int	g_iGameState = 0;		// ÓÎÏ·×´Ì¬£¬0 -- ÓÎÏ·½áÊøµÈ´ı¿ªÊ¼×´Ì¬£»1 -- °´ÏÂ¿Õ¸ñ¼ü¿ªÊ¼£¬³õÊ¼»¯ÓÎÏ·£»2 -- ÓÎÏ·½øĞĞÖĞ
 //
 
 
 
 //==============================================================================
 //
-// å®šä¹‰ç»“æ„ä½“
+// ¶¨Òå½á¹¹Ìå
 
 /*
-åƒµå°¸çš„ç§ç±»ï¼š classify é»˜è®¤ä¸º1 å†³å®šå®ƒçš„æ¨¡æ · / è¡ŒåŠ¨æ–¹å¼ / é€Ÿåº¦
+½©Ê¬µÄÖÖÀà£º classify Ä¬ÈÏÎª1 ¾ö¶¨ËüµÄÄ£Ñù / ĞĞ¶¯·½Ê½ / ËÙ¶È
 */
 struct Zombie{
 	int classify;
@@ -33,25 +33,25 @@ struct Zombie{
 	float speedY;
 	int direction;
 	float fire_timer;
-	float get_shot_timer; // è¢«å‡»ä¸­æ—¶ä¸ºå½•å…¥å‡»ä¸­çŠ¶æ€çš„æ—¶é—´
+	float get_shot_timer; // ±»»÷ÖĞÊ±ÎªÂ¼Èë»÷ÖĞ×´Ì¬µÄÊ±¼ä
 	int life;
 	boolean active;
 };
 
-// å­å¼¹
+// ×Óµ¯
 struct Bullet{
 	int classify;
 	int speed;
     float x;
     float y;
 	int direction;
-	int color; // é»˜è®¤ä¸º1
+	int color; // Ä¬ÈÏÎª1
 	int speedX;
 	int speedY;
 	boolean active;
 };
 
-/* ç©å®¶ */
+/* Íæ¼Ò */
 struct Player{
 	float x;
 	float y;
@@ -59,50 +59,50 @@ struct Player{
 	int life;
 	int direction;
 	float speed;
-	float speedX;  	// Xæ–¹å‘é€Ÿåº¦
-	float speedY;   // Yæ–¹å‘é€Ÿåº¦
+	float speedX;  	// X·½ÏòËÙ¶È
+	float speedY;   // Y·½ÏòËÙ¶È
 	float speedTop;
 	float speedLeft;
 	float speedRight;
 	float speedBottom;
-	boolean shooting_flag; // æ§åˆ¶ç©å®¶å­å¼¹è¾“å‡º
-	float bitten_timer; // äººè¢«å’¬äº†ä¹‹åå¼€å§‹è®¡æ—¶
-	float bullet_appear_timer;// äººå‘å°„å­å¼¹çš„é—´éš”
-	Zombie* bit_zombie; // å’¬äººçš„åƒµå°¸
+	boolean shooting_flag; // ¿ØÖÆÍæ¼Ò×Óµ¯Êä³ö
+	float bitten_timer; // ÈË±»Ò§ÁËÖ®ºó¿ªÊ¼¼ÆÊ±
+	float bullet_appear_timer;// ÈË·¢Éä×Óµ¯µÄ¼ä¸ô
+	Zombie* bit_zombie; // Ò§ÈËµÄ½©Ê¬
 };
 
-/* å¢™å£ */
+/* Ç½±Ú */
 struct Wall{
 	float x;
 	float y;
 	int classify;
 	int life;
 	boolean active;
-	float get_shot_timer; // è¢«å‡»ä¸­æ—¶ä¸ºå½•å…¥å‡»ä¸­çŠ¶æ€çš„æ—¶é—´
+	float get_shot_timer; // ±»»÷ÖĞÊ±ÎªÂ¼Èë»÷ÖĞ×´Ì¬µÄÊ±¼ä
 };
 
-/* é’±å¸ */
+/* Ç®±Ò */
 struct Money{
 	int x;
 	int y;
 	boolean active;
-	boolean get_flag;// ä¸ä¸‹é¢çš„get_timerå…±åŒå®Œæˆé’±å¸è®¡æ•°ç‰¹æ•ˆ
+	boolean get_flag;// ÓëÏÂÃæµÄget_timer¹²Í¬Íê³ÉÇ®±Ò¼ÆÊıÌØĞ§
 	float get_timer;
 };
 
-/* å‰§æƒ…èŠ‚ç‚¹ */
+/* ¾çÇé½Úµã */
 struct Plot{
 	int id; 
-	char* speaker; // è¯´è¯è€…åå­—
-	char* content; // è¯´è¯çš„å†…å®¹
-	int picture1; // å¯¹åº”çš„ç«‹ç»˜
+	char* speaker; // Ëµ»°ÕßÃû×Ö
+	char* content; // Ëµ»°µÄÄÚÈİ
+	int picture1; // ¶ÔÓ¦µÄÁ¢»æ
 	int picture2;
 	boolean end_flag;
 };
 
 //==============================================================================
 //
-// å£°æ˜å‡½æ•°
+// ÉùÃ÷º¯Êı
 
 void GameInit();
 void GameRun( float fDeltaTime );
@@ -126,60 +126,61 @@ void loadPlots();
 void playPlots( float fDeltaTime );
 void FireAim(float x,float y,int direction,char* user);
 void FireRound(float x, float y,char* user);
+void FireRound1(float x, float y,char* user);
 int newMoney( float ix,float iy );
 void getMoney( struct Money* money,char* szName );
 void moneyMove( struct Money* money,char* szName );
 void goShopping( float fDeltaTime );
 //==============================================================================
 //
-// å£°æ˜å¸¸é‡
+// ÉùÃ÷³£Á¿
 
-//å•ä½æœ€å¤§æ•°é‡è®¾å®š
+//µ¥Î»×î´óÊıÁ¿Éè¶¨
 #define ZOMBIE_MAX 150
 #define BULLET_MAX 100
 #define WALL_MAX 150
 #define MONEY_MAX 30
 
-// ç©å®¶æœ€å¤§é€Ÿåº¦è®¾å®š
-#define PLAYER_SPEED 14
+// Íæ¼Ò×î´óËÙ¶ÈÉè¶¨
+#define PLAYER_SPEED 20
 
-// å­å¼¹é€Ÿåº¦è®¾å®š
+// ×Óµ¯ËÙ¶ÈÉè¶¨
 #define BULLET_TYPE1_SPEED 150.0
 #define BULLET_TYPE2_SPEED 300.0
 
-// åƒµå°¸å­å¼¹é€Ÿåº¦è®¾å®š
+// ½©Ê¬×Óµ¯ËÙ¶ÈÉè¶¨
 #define BULLET_TYPE1_SPEED_ZOMBIE 20
 #define BULLET_TYPE2_SPEED_ZOMBIE 15
 
-// å„ç§ç±»åƒµå°¸é€Ÿåº¦è®¾å®š
+// ¸÷ÖÖÀà½©Ê¬ËÙ¶ÈÉè¶¨
 #define ZOMBIE_TYPE1_SPEED 5.0
 #define ZOMBIE_TYPE2_SPEED 30.0
 #define ZOMBIE_TYPE3_SPEED 25.0
 #define ZOMBIE_TYPE4_SPEED 25.0
 
-// å„ç§ç±»å¢™å£çš„ç”Ÿå‘½å€¼è®¾å®š
+// ¸÷ÖÖÀàÇ½±ÚµÄÉúÃüÖµÉè¶¨
 #define WALL_TYPE1_LIFE 8
 #define WALL_TYPE2_LIFE 20
 
-// ç©å®¶åˆå§‹ç”Ÿå‘½å€¼è®¾å®š
+// Íæ¼Ò³õÊ¼ÉúÃüÖµÉè¶¨
 #define LIFE_INIT 5
 
-// å„ç§ç±»åƒµå°¸åˆå§‹ç”Ÿå‘½å€¼è®¾å®š
+// ¸÷ÖÖÀà½©Ê¬³õÊ¼ÉúÃüÖµÉè¶¨
 #define ZOMBIE_TYPE1_LIFE 2
 #define ZOMBIE_TYPE2_LIFE 6
-#define ZOMBIE_TYPE3_LIFE 20
+#define ZOMBIE_TYPE3_LIFE 25
 
-// åƒµå°¸è¢«æ€æ­»åmoneyçš„æ‰è½ç‡ 0~10
+// ½©Ê¬±»É±ËÀºómoneyµÄµôÂäÂÊ 0~10
 #define MONEY_APPEAR_RATE 4
 
-// é’±å¸è®¡æ•°ç‰¹æ•ˆçš„æŒç»­æ—¶é—´
+// Ç®±Ò¼ÆÊıÌØĞ§µÄ³ÖĞøÊ±¼ä
 #define MONEY_FLY_TIME 0.4
 
-// åœ†å‘¨ç‡
+// Ô²ÖÜÂÊ
 #define PI 3.1415926535
 
-// è®¡æ—¶é—´éš”
-#define ZOMBIE_APPEAR_TIME 2.8
+// ¼ÆÊ±¼ä¸ô
+#define ZOMBIE_APPEAR_TIME 2.0
 #define BULLET_APPEAR_TIME 0.6
 #define BULLET_APPEAR_TIME_UP 0.3
 #define ZOMBIE_HITTEN_TIME 0.3
@@ -187,17 +188,17 @@ void goShopping( float fDeltaTime );
 #define PLAYER_BITTEN_TIME 0.1
 #define ZOMBIE_FIRE_TIME 4
 
-// å‘å°„é—´è·
+// ·¢Éä¼ä¾à
 #define GAP_BETWEEN_PLAYER_AND_BULLET 1
 
-// æ¸¸ç©äººæ•°
+// ÓÎÍæÈËÊı
 #define PLAYER_NUMBER 2
 
-// äººç‰©åå­—
-#define BOY "ç½—å‰"
-#define GIRL "çˆ±æ–¯å¡"
+// ÈËÎïÃû×Ö
+#define BOY "ÂŞ¼ª"
+#define GIRL "°®Ë¹¿¨"
 
-// äººç‰©è¡¨æƒ…å¯¹åº”çš„å¸§æ•°
+// ÈËÎï±íÇé¶ÔÓ¦µÄÖ¡Êı
 #define BOY_NORMAL 0
 #define BOY_NERVOUS 1
 #define BOY_BAD 2
@@ -207,104 +208,105 @@ void goShopping( float fDeltaTime );
 #define GIRL_CURIOUS 1
 #define GIRL_HAPPY 2
 
-// æ¸¸æˆä¸­çš„å„ç§çŠ¶æ€
+// ÓÎÏ·ÖĞµÄ¸÷ÖÖ×´Ì¬
 #define MAIN_GAME 1
 #define TALKING 2
 #define SHOPPING 3
 
 //==============================================================================
 //
-// å£°æ˜å…¨å±€å˜é‡
+// ÉùÃ÷È«¾Ö±äÁ¿
 
-boolean GodMode = false;	//æ— æ•Œæ¨¡å¼ï¼ˆè°ƒè¯•ç”¨ï¼‰
+boolean GodMode = false;	//ÎŞµĞÄ£Ê½£¨µ÷ÊÔÓÃ£©
 
-int bgmID; // ç°åœ¨æ’­æ”¾ç€çš„bgmçš„id
+int bgmID; // ÏÖÔÚ²¥·Å×ÅµÄbgmµÄid
 
-struct Bullet bullet[BULLET_MAX];	//é¢„ç”ŸæˆBulletæ± 
-struct Zombie zombie[ZOMBIE_MAX];	//é¢„ç”ŸæˆZombieæ± 
-struct Wall wall[WALL_MAX];  //é¢„ç”ŸæˆWallæ± 
+struct Bullet bullet[BULLET_MAX];	//Ô¤Éú³ÉBullet³Ø
+struct Zombie zombie[ZOMBIE_MAX];	//Ô¤Éú³ÉZombie³Ø
+struct Wall wall[WALL_MAX];  //Ô¤Éú³ÉWall³Ø
 struct Money money[MONEY_MAX];
 struct Player player[PLAYER_NUMBER];  
 
-struct Plot plot[100]; // ç”Ÿæˆå‰§æƒ…é“¾æ¡
+struct Plot plot[100]; // Éú³É¾çÇéÁ´Ìõ
 int current_plot;
 int currnet_plot_ensure;
 
-float SCREEN_LEFT;    // å±å¹•è¾¹ç•Œå€¼
+float SCREEN_LEFT;    // ÆÁÄ»±ß½çÖµ
 float SCREEN_RIGHT;    
 float SCREEN_TOP;    
 float SCREEN_BOTTOM;  
 
-float counter; // å…¨å±€è®¡æ—¶å™¨
+float counter; // È«¾Ö¼ÆÊ±Æ÷
 
-int myMoney; // é‡‘é’±
+int myMoney; // ½ğÇ®
 
-int boss_zombie; // bossåƒµå°¸çš„IDï¼Œä¾¿äºæ“ä½œ
+int boss_zombie; // boss½©Ê¬µÄID£¬±ãÓÚ²Ù×÷
 
-// æ£€æµ‹å•†åŸé‡Œçš„ä¸œè¥¿æ˜¯å¦è¢«ä¹°èµ°
+// ¼ì²âÉÌ³ÇÀïµÄ¶«Î÷ÊÇ·ñ±»Âò×ß
 boolean bullet_up_bought = false;
 boolean skill1_bought = false;
 boolean skill2_bought = false;
 
 boolean shop_enter_flag = false;
 
-// æ§åˆ¶æ——
+// ¿ØÖÆÆì
 
 /**
- * åœºæ™¯æ§åˆ¶æ——
- * 1: å¼€å§‹é¡µé¢
- * 2ï¼šå‰§æƒ…æ¨¡å¼ç¬¬ä¸€å…³
- * 3ï¼šç¬¬äºŒå…³
- * 4ï¼šç¬¬ä¸‰å…³
- * 5ï¼šæ¸¸æˆç©æ³•
+ * ³¡¾°¿ØÖÆÆì
+ * 1: ¿ªÊ¼Ò³Ãæ
+ * 2£º¾çÇéÄ£Ê½µÚÒ»¹Ø
+ * 3£ºµÚ¶ş¹Ø
+ * 4£ºµÚÈı¹Ø
+ * 5£ºÓÎÏ·Íæ·¨
  * 6: gameover
+ * 7: win
  */
 int game_scene_flag = 1;
 int current_scene_flag = 0;
 
 /**
- * çŠ¶æ€æ§åˆ¶æ——
- * MAIN_GAME 1 æ¸¸æˆä¸­çŠ¶æ€
- * TALKING 2 å‰§æƒ…å¯¹è¯æ’­æ”¾çŠ¶æ€
- * SHOPPING 3 è‡ªåŠ¨å”®è´§æœºè´­ç‰©ä¸­çŠ¶æ€
+ * ×´Ì¬¿ØÖÆÆì
+ * MAIN_GAME 1 ÓÎÏ·ÖĞ×´Ì¬
+ * TALKING 2 ¾çÇé¶Ô»°²¥·Å×´Ì¬
+ * SHOPPING 3 ×Ô¶¯ÊÛ»õ»ú¹ºÎïÖĞ×´Ì¬
  */
 int game_mode_flag;
 
-boolean click_flag = false; // æ£€æµ‹é¼ æ ‡ç‚¹å‡»
+boolean click_flag = false; // ¼ì²âÊó±êµã»÷
 
-boolean boss_flag; // å‡ºç°boss
+boolean boss_flag; // ³öÏÖboss
 
-// æ—¶é—´é—´éš”è®¡æ—¶å™¨
+// Ê±¼ä¼ä¸ô¼ÆÊ±Æ÷
 float zombie_appear_timer;
 
 //==============================================================================
 //
-// å¤§ä½“çš„ç¨‹åºæµç¨‹ä¸ºï¼šGameMainLoopå‡½æ•°ä¸ºä¸»å¾ªç¯å‡½æ•°ï¼Œåœ¨å¼•æ“æ¯å¸§åˆ·æ–°å±å¹•å›¾åƒä¹‹åï¼Œéƒ½ä¼šè¢«è°ƒç”¨ä¸€æ¬¡ã€‚
+// ´óÌåµÄ³ÌĞòÁ÷³ÌÎª£ºGameMainLoopº¯ÊıÎªÖ÷Ñ­»·º¯Êı£¬ÔÚÒıÇæÃ¿Ö¡Ë¢ĞÂÆÁÄ»Í¼ÏñÖ®ºó£¬¶¼»á±»µ÷ÓÃÒ»´Î¡£
 
 
 //==============================================================================
 //
-// æ¸¸æˆä¸»å¾ªç¯ï¼Œæ­¤å‡½æ•°å°†è¢«ä¸åœçš„è°ƒç”¨ï¼Œå¼•æ“æ¯åˆ·æ–°ä¸€æ¬¡å±å¹•ï¼Œæ­¤å‡½æ•°å³è¢«è°ƒç”¨ä¸€æ¬¡
-// ç”¨ä»¥å¤„ç†æ¸¸æˆçš„å¼€å§‹ã€è¿›è¡Œä¸­ã€ç»“æŸç­‰å„ç§çŠ¶æ€. 
-// å‡½æ•°å‚æ•°fDeltaTime : ä¸Šæ¬¡è°ƒç”¨æœ¬å‡½æ•°åˆ°æ­¤æ¬¡è°ƒç”¨æœ¬å‡½æ•°çš„æ—¶é—´é—´éš”ï¼Œå•ä½ï¼šç§’
+// ÓÎÏ·Ö÷Ñ­»·£¬´Ëº¯Êı½«±»²»Í£µÄµ÷ÓÃ£¬ÒıÇæÃ¿Ë¢ĞÂÒ»´ÎÆÁÄ»£¬´Ëº¯Êı¼´±»µ÷ÓÃÒ»´Î
+// ÓÃÒÔ´¦ÀíÓÎÏ·µÄ¿ªÊ¼¡¢½øĞĞÖĞ¡¢½áÊøµÈ¸÷ÖÖ×´Ì¬. 
+// º¯Êı²ÎÊıfDeltaTime : ÉÏ´Îµ÷ÓÃ±¾º¯Êıµ½´Ë´Îµ÷ÓÃ±¾º¯ÊıµÄÊ±¼ä¼ä¸ô£¬µ¥Î»£ºÃë
 void GameMainLoop( float fDeltaTime )
 {
 	switch( g_iGameState )
 	{
-		// åˆå§‹åŒ–æ¸¸æˆï¼Œæ¸…ç©ºä¸Šä¸€å±€ç›¸å…³æ•°æ®
+		// ³õÊ¼»¯ÓÎÏ·£¬Çå¿ÕÉÏÒ»¾ÖÏà¹ØÊı¾İ
 	case 1:
 		{		
-			g_iGameState = 2; // åˆå§‹åŒ–ä¹‹åï¼Œå°†æ¸¸æˆçŠ¶æ€è®¾ç½®ä¸ºè¿›è¡Œä¸­
+			g_iGameState = 2; // ³õÊ¼»¯Ö®ºó£¬½«ÓÎÏ·×´Ì¬ÉèÖÃÎª½øĞĞÖĞ
 		}
 		break;
 
-		// æ¸¸æˆè¿›è¡Œä¸­ï¼Œå¤„ç†å„ç§æ¸¸æˆé€»è¾‘
+		// ÓÎÏ·½øĞĞÖĞ£¬´¦Àí¸÷ÖÖÓÎÏ·Âß¼­
 	case 2:
 		{
-			// TODO ä¿®æ”¹æ­¤å¤„æ¸¸æˆå¾ªç¯æ¡ä»¶ï¼Œå®Œæˆæ­£ç¡®æ¸¸æˆé€»è¾‘
+			// TODO ĞŞ¸Ä´Ë´¦ÓÎÏ·Ñ­»·Ìõ¼ş£¬Íê³ÉÕıÈ·ÓÎÏ·Âß¼­
 			if( true )
 			{
-				// åˆ¤æ–­æ¸¸æˆåœ¨å“ªä¸ªç”»é¢ä¸­
+				// ÅĞ¶ÏÓÎÏ·ÔÚÄÄ¸ö»­ÃæÖĞ
 				if( current_scene_flag == game_scene_flag ){							
 				}else{
 					switch( game_scene_flag ){
@@ -312,7 +314,9 @@ void GameMainLoop( float fDeltaTime )
 						case 2: dLoadMap("baseView.t2d"); GameInit();loadPlots(); break;
 						case 3: GameInit();break;
 						case 4: GameInit();break;
+						case 5: dLoadMap("info.t2d");break;
 						case 6: dLoadMap("gameover.t2d");break;
+						case 7: dLoadMap("win.t2d");break;
 					}
 					current_scene_flag = game_scene_flag;
 				}
@@ -349,14 +353,14 @@ void GameMainLoop( float fDeltaTime )
 			}
 			else
 			{
-				// æ¸¸æˆç»“æŸã€‚è°ƒç”¨æ¸¸æˆç»“ç®—å‡½æ•°ï¼Œå¹¶æŠŠæ¸¸æˆçŠ¶æ€ä¿®æ”¹ä¸ºç»“æŸçŠ¶æ€
+				// ÓÎÏ·½áÊø¡£µ÷ÓÃÓÎÏ·½áËãº¯Êı£¬²¢°ÑÓÎÏ·×´Ì¬ĞŞ¸ÄÎª½áÊø×´Ì¬
 				g_iGameState = 0;
 				GameEnd();
 			}
 		}
 		break;
 
-		// æ¸¸æˆç»“æŸ/ç­‰å¾…æŒ‰ç©ºæ ¼é”®å¼€å§‹
+		// ÓÎÏ·½áÊø/µÈ´ı°´¿Õ¸ñ¼ü¿ªÊ¼
 	case 0: g_iGameState = 1;
 	default:
 		break;
@@ -365,79 +369,79 @@ void GameMainLoop( float fDeltaTime )
 
 //==============================================================================
 //
-// æ¯å±€å¼€å§‹å‰è¿›è¡Œåˆå§‹åŒ–ï¼Œæ¸…ç©ºä¸Šä¸€å±€ç›¸å…³æ•°æ®
+// Ã¿¾Ö¿ªÊ¼Ç°½øĞĞ³õÊ¼»¯£¬Çå¿ÕÉÏÒ»¾ÖÏà¹ØÊı¾İ
 void GameInit()
 {
-	// ä¸åŒå…³å¡çš„åˆ†æ”¯æ“ä½œ
+	// ²»Í¬¹Ø¿¨µÄ·ÖÖ§²Ù×÷
 	if( game_scene_flag == 2 ){
 
-		// å…ˆæ’­ä¸ªéŸ³ä¹
+		// ÏÈ²¥¸öÒôÀÖ
 		bgmID = dPlaySound("bgm_test1.ogg", 1, 1.0 );
 
-		// éšè—ä¸€äº›ä¸œè¥¿
+		// Òş²ØÒ»Ğ©¶«Î÷
 		dSetSpriteVisible("bossname",0);
 		dSetSpriteVisible("bloodline",0);
 		dSetSpritePosition("seller",-119.266,1.185);
 		dSetSpritePosition("next",119,-7.349);
 		// dSetSpriteVisible("seller",1);
 
-		// åˆå§‹åŒ–ç”Ÿå‘½å€¼ / åˆ†æ•° / é‡‘é’±
+		// ³õÊ¼»¯ÉúÃüÖµ / ·ÖÊı / ½ğÇ®
 		myMoney = 0;
 
-		// åˆå§‹åŒ–è®¡æ•°å™¨ ä¸ è®¡æ—¶å™¨
+		// ³õÊ¼»¯¼ÆÊıÆ÷ Óë ¼ÆÊ±Æ÷
 		counter = 20;
 		zombie_appear_timer = ZOMBIE_APPEAR_TIME;
 
-		// å»åˆ°å‰§æƒ…å¼€å§‹
+		// È¥µ½¾çÇé¿ªÊ¼
 		current_plot = 0;
 		currnet_plot_ensure = -1;
 
-		// åˆå§‹åŒ–å•†åŸç‰©å“
+		// ³õÊ¼»¯ÉÌ³ÇÎïÆ·
 		bullet_up_bought = false;
 		skill1_bought = false;
 		skill2_bought = false;
 
 	}else if( game_scene_flag == 3){
 
-		// å…ˆæ’­ä¸ªéŸ³ä¹
+		// ÏÈ²¥¸öÒôÀÖ
 		dStopSound( bgmID );
 		bgmID = dPlaySound("bgm_test2.ogg", 1, 1.0 );
 
-		// åˆå§‹åŒ–è®¡æ•°å™¨ ä¸ è®¡æ—¶å™¨
+		// ³õÊ¼»¯¼ÆÊıÆ÷ Óë ¼ÆÊ±Æ÷
 		counter = 20;
 		zombie_appear_timer = ZOMBIE_APPEAR_TIME*2;
 	}else if( game_scene_flag == 4){
 
-		// å…ˆæ’­ä¸ªéŸ³ä¹
+		// ÏÈ²¥¸öÒôÀÖ
 		dStopSound( bgmID );
 		bgmID = dPlaySound("bgm_test3.ogg", 1, 1.0 );
 
-		// ä½¿æœ€ç»ˆbossçš„æ•°æ®æ˜¾ç°
+		// Ê¹×îÖÕbossµÄÊı¾İÏÔÏÖ
 		dSetSpriteVisible("bloodline",1);
 		dSetSpriteVisible("bossname",1);
 
-		// åˆå§‹åŒ–è®¡æ•°å™¨ ä¸ è®¡æ—¶å™¨
+		// ³õÊ¼»¯¼ÆÊıÆ÷ Óë ¼ÆÊ±Æ÷
 		// counter = 60;
 		zombie_appear_timer = ZOMBIE_APPEAR_TIME*3;
 	}
 	
 
-	// åˆå§‹åŒ–æ§åˆ¶æ——
+	// ³õÊ¼»¯¿ØÖÆÆì
 	boss_flag = false;
 
-	// æ‹¿åˆ°çª—å£è¾¹ç•Œ
+	// ÄÃµ½´°¿Ú±ß½ç
 	SCREEN_LEFT = dGetScreenLeft();
 	SCREEN_RIGHT = dGetScreenRight(); 
 	SCREEN_TOP = dGetScreenTop();
 	SCREEN_BOTTOM = dGetScreenBottom();
 
-	// å…ˆè¿›å…¥å‰§æƒ…æ¨¡å¼
+	// ÏÈ½øÈë¾çÇéÄ£Ê½
 	game_mode_flag = TALKING;
 	
-	// å¾ªç¯æ§åˆ¶å˜é‡	
+	// Ñ­»·¿ØÖÆ±äÁ¿	
 	int i;
 
-	// åˆå§‹åŒ–zombie
+	// ³õÊ¼»¯zombie
 	for(i = 0; i < ZOMBIE_MAX; i++) {
 		zombie[i].classify = 1;
 		zombie[i].x = 0;
@@ -451,7 +455,7 @@ void GameInit()
 		zombie[i].fire_timer = ZOMBIE_FIRE_TIME;
 	}
 
-	// åˆå§‹åŒ–å­å¼¹
+	// ³õÊ¼»¯×Óµ¯
 	for(i = 0; i < BULLET_MAX; i++){ 
 		bullet[i].classify = 1;
 		bullet[i].speed = 0;
@@ -462,7 +466,7 @@ void GameInit()
 		bullet[i].active = false;
 	}
 
-	// åˆå§‹åŒ–åƒµå°¸çš„å­å¼¹
+	// ³õÊ¼»¯½©Ê¬µÄ×Óµ¯
 	for(i = 0; i < BULLET_MAX; i++){ 
 		bullet[i].speed = 0;
 		bullet[i].x = 0.0;
@@ -472,7 +476,7 @@ void GameInit()
 		bullet[i].active = false;
 	}
 
-	// åˆå§‹åŒ–å¢™å£
+	// ³õÊ¼»¯Ç½±Ú
 	for(i = 0;i < WALL_MAX;i++){
 		wall[i].x = 0.0;
 		wall[i].y = 0.0;
@@ -482,7 +486,7 @@ void GameInit()
 		wall[i].get_shot_timer = 0;
 	}
 
-	// åˆå§‹åŒ–é’±å¸
+	// ³õÊ¼»¯Ç®±Ò
 	for(i = 0;i < MONEY_MAX;i++){
 		money[i].x = 0;
 		money[i].y = 0;
@@ -491,7 +495,7 @@ void GameInit()
 		money[i].get_timer = 0;
 	}
 
-	// åˆå§‹åŒ–ç©å®¶
+	// ³õÊ¼»¯Íæ¼Ò
 	for(i = 0;i < PLAYER_NUMBER;i++){
 		player[i].life = LIFE_INIT;
 		player[i].x = -pow(-1,i)*SCREEN_RIGHT/2;
@@ -499,8 +503,8 @@ void GameInit()
 		player[i].id = i;
 		player[i].direction = 90;
 		player[i].speed = PLAYER_SPEED;
-		player[i].speedX = 0.f;  	// Xæ–¹å‘é€Ÿåº¦
-		player[i].speedY = 0.f; // Yæ–¹å‘é€Ÿåº¦
+		player[i].speedX = 0.f;  	// X·½ÏòËÙ¶È
+		player[i].speedY = 0.f; // Y·½ÏòËÙ¶È
 		player[i].speedRight = 0.f;  	
 		player[i].speedLeft = 0.f;  	
 		player[i].speedTop = 0.f;  
@@ -512,29 +516,29 @@ void GameInit()
 	}
 	
 
-	// å…±ç”¨å­—ç¬¦ä¸²åœ°å€ï¼Œé¿å…èµ„æºæµªè´¹
+	// ¹²ÓÃ×Ö·û´®µØÖ·£¬±ÜÃâ×ÊÔ´ÀË·Ñ
 	char szName[64];
 
-	// åˆå§‹åŒ–zombieç²¾çµ
+	// ³õÊ¼»¯zombie¾«Áé
 	for(i = 0; i < ZOMBIE_MAX; i++) {		
 		sprintf(szName, "zombie_%d", i);
 		if( game_scene_flag == 2){
 			dCloneSprite("zombie",szName);
 		}	
-		dSetSpriteVisible(szName,0); // è®¾ç½®å®ƒä»¬ä¸å¯è§
+		dSetSpriteVisible(szName,0); // ÉèÖÃËüÃÇ²»¿É¼û
 	}
 
-	// åˆå§‹åŒ–bulletç²¾çµ
+	// ³õÊ¼»¯bullet¾«Áé
 	for(i = 0; i < BULLET_MAX; i++){
 		sprintf(szName,"bullet_%d",i);
 		if( game_scene_flag == 2){
 			dCloneSprite("bullet",szName);
 		}		
-		dSetSpriteVisible(szName,0); // è®¾ç½®å®ƒä»¬ä¸å¯è§
+		dSetSpriteVisible(szName,0); // ÉèÖÃËüÃÇ²»¿É¼û
 	}
 
-	// åˆå§‹åŒ–wallç²¾çµ
-	// å› ä¸ºå¢™å£ç²¾çµé çš„æ˜¯ç‰©ç†ç¢°æ’ï¼Œæ— æ³•é€šè¿‡è®¾ç½®activeå›æ”¶ï¼Œè¿™é‡Œæ‰‹åŠ¨å°†å®ƒä»¬ç§»å¼€
+	// ³õÊ¼»¯wall¾«Áé
+	// ÒòÎªÇ½±Ú¾«Áé¿¿µÄÊÇÎïÀíÅö×²£¬ÎŞ·¨Í¨¹ıÉèÖÃactive»ØÊÕ£¬ÕâÀïÊÖ¶¯½«ËüÃÇÒÆ¿ª
 	for(i = 0;i < WALL_MAX;i++){
 		sprintf(szName,"wall_%d",i);
 		if( game_scene_flag == 2){
@@ -544,7 +548,7 @@ void GameInit()
 		dSetSpriteVisible(szName,0);
 	}
 
-	// åˆå§‹åŒ–playerç²¾çµ
+	// ³õÊ¼»¯player¾«Áé
 	for(i = 0;i < PLAYER_NUMBER;i++){
 		sprintf(szName,"player_%d",i);
 		dSetSpritePosition( szName,player[i].x,player[i].y );
@@ -552,7 +556,7 @@ void GameInit()
 		dSetSpriteEnable(szName,1);
 	}
 
-	// åˆå§‹åŒ–moneyç²¾çµ
+	// ³õÊ¼»¯money¾«Áé
 	for(i = 0;i < MONEY_MAX;i++){
 		sprintf(szName,"money_%d",i);
 		if( game_scene_flag == 2){
@@ -561,21 +565,21 @@ void GameInit()
 		dSetSpriteVisible(szName,0);
 	}
 	
-	// éšæœºåˆ›å»ºåœ°å›¾ä¸Šçš„å¢™å£
+	// Ëæ»ú´´½¨µØÍ¼ÉÏµÄÇ½±Ú
 	for(i = 0;i < 10;i++){
 		float random1 = rand()%10/10.0*SCREEN_RIGHT*2 - SCREEN_RIGHT;
 		float random2 = rand()%10/10.0*SCREEN_BOTTOM*2 - SCREEN_BOTTOM;
-		newWall(random1,random2,1); // å®Œæˆæ¡†æ¶å‰å…ˆæŠŠæ‰€æœ‰å¢™å£å½“ä½œç±»å‹1
+		newWall(random1,random2,1); // Íê³É¿ò¼ÜÇ°ÏÈ°ÑËùÓĞÇ½±Úµ±×÷ÀàĞÍ1
 	}
 }
 //==============================================================================
 //
-// æ¯å±€æ¸¸æˆè¿›è¡Œä¸­
+// Ã¿¾ÖÓÎÏ·½øĞĞÖĞ
 void GameRun( float fDeltaTime )
 {	
-	int i; // å¾ªç¯æ§åˆ¶å˜é‡
+	int i; // Ñ­»·¿ØÖÆ±äÁ¿
 
-	// è®¡æ—¶
+	// ¼ÆÊ±
 	counter -= fDeltaTime;	
 	zombie_appear_timer -= fDeltaTime;
 	for( i = 0;i < ZOMBIE_MAX;i++){
@@ -598,22 +602,22 @@ void GameRun( float fDeltaTime )
 		money[i].get_timer -= fDeltaTime;
 	}
 
-	// æ ¹æ®ä¸åŒçš„å…³å¡åšä¸ä¸€æ ·çš„äº‹æƒ…
+	// ¸ù¾İ²»Í¬µÄ¹Ø¿¨×ö²»Ò»ÑùµÄÊÂÇé
 	if( game_scene_flag == 2){
-		// ä»¥ç›¸ç­‰çš„é—´éš”æ¿€æ´»Zombie
+		// ÒÔÏàµÈµÄ¼ä¸ô¼¤»îZombie
 		if( counter >= 0){
 			if( zombie_appear_timer < 0 ){
 				zombie_appear_timer = ZOMBIE_APPEAR_TIME;
-				newZombie(SCREEN_RIGHT*2*(rand()%10/10.0) - SCREEN_RIGHT, SCREEN_TOP,1); // åœ¨ç”»é¢é¡¶éƒ¨ç”Ÿæˆä¸€ä¸‹æµ‹è¯•ç”¨åƒµå°¸	
+				newZombie(SCREEN_RIGHT*2*(rand()%10/10.0) - SCREEN_RIGHT, SCREEN_TOP,1); // ÔÚ»­Ãæ¶¥²¿Éú³ÉÒ»ÏÂ²âÊÔÓÃ½©Ê¬	
 			}
 		}
-		// æ¿€æ´»boss
+		// ¼¤»îboss
 		if( (counter < 0) && (boss_flag == false) ){
 			boss_flag = true;
 			newZombie(SCREEN_RIGHT*2*(rand()%10/10.0) - SCREEN_RIGHT, SCREEN_TOP,2);
 		}
 		if( counter < 0 ){
-			// è¿›å…¥ä¸‹ä¸€å…³
+			// ½øÈëÏÂÒ»¹Ø
 			boolean next_flag = true;
 			if( boss_flag == true ){
 				for(i = 0;i < ZOMBIE_MAX;i++){
@@ -631,23 +635,24 @@ void GameRun( float fDeltaTime )
 		}
 		
 	}else if( game_scene_flag == 3 ){
-		// ä»¥ç›¸ç­‰çš„é—´éš”æ¿€æ´»Zombie
+		// ÒÔÏàµÈµÄ¼ä¸ô¼¤»îZombie
 		if( counter >= 0){
 			if( zombie_appear_timer < 0 ){
 				zombie_appear_timer = ZOMBIE_APPEAR_TIME*2.5;
-				newZombie(SCREEN_RIGHT*2*(rand()%10/10.0) - SCREEN_RIGHT, SCREEN_TOP,1); // åœ¨ç”»é¢é¡¶éƒ¨ç”Ÿæˆä¸€ä¸‹æµ‹è¯•ç”¨åƒµå°¸
-				newZombie(SCREEN_RIGHT, SCREEN_BOTTOM*2*(rand()%10/10.0) - SCREEN_BOTTOM,1); // åœ¨ç”»é¢å·¦éƒ¨ç”Ÿæˆä¸€ä¸‹æµ‹è¯•ç”¨åƒµå°¸
-				newZombie(SCREEN_LEFT, SCREEN_BOTTOM*2*(rand()%10/10.0) - SCREEN_BOTTOM,1); // åœ¨ç”»é¢å³éƒ¨ç”Ÿæˆä¸€ä¸‹æµ‹è¯•ç”¨åƒµå°¸
+				newZombie(SCREEN_RIGHT*2*(rand()%10/10.0) - SCREEN_RIGHT, SCREEN_TOP,1); // ÔÚ»­Ãæ¶¥²¿Éú³ÉÒ»ÏÂ²âÊÔÓÃ½©Ê¬
+				newZombie(SCREEN_RIGHT, SCREEN_BOTTOM*2*(rand()%10/10.0) - SCREEN_BOTTOM,1); // ÔÚ»­Ãæ×ó²¿Éú³ÉÒ»ÏÂ²âÊÔÓÃ½©Ê¬
+				newZombie(SCREEN_LEFT, SCREEN_BOTTOM*2*(rand()%10/10.0) - SCREEN_BOTTOM,1); // ÔÚ»­ÃæÓÒ²¿Éú³ÉÒ»ÏÂ²âÊÔÓÃ½©Ê¬
 			}
 		}
-		// æ¿€æ´»boss
+		// ¼¤»îboss
 		if( (counter < 0) && (boss_flag == false) ){
 			boss_flag = true;
 			newZombie(SCREEN_RIGHT*2*(rand()%10/10.0) - SCREEN_RIGHT, SCREEN_TOP,2);
 			newZombie(SCREEN_RIGHT*2*(rand()%10/10.0) - SCREEN_RIGHT, SCREEN_TOP,2);	
+			newZombie(SCREEN_RIGHT*2*(rand()%10/10.0) - SCREEN_RIGHT, SCREEN_TOP,2);
 		}
 
-		// è¿›å…¥ä¸‹ä¸€å…³
+		// ½øÈëÏÂÒ»¹Ø
 		if(counter < 0){
 			boolean next_flag = true;
 			if( boss_flag == true ){
@@ -669,27 +674,29 @@ void GameRun( float fDeltaTime )
 			boss_flag = true; 
 			boss_zombie = newZombie(SCREEN_RIGHT*2*(rand()%10/10.0) - SCREEN_RIGHT, SCREEN_TOP,3);
 		}
-		// åœ¨æœ€ç»ˆbossè¢«å¹²æ‰ä¹‹å‰å¾ªç¯å‡ºç°å°åƒµå°¸
+		// ÔÚ×îÖÕboss±»¸ÉµôÖ®Ç°Ñ­»·³öÏÖĞ¡½©Ê¬
 		if( zombie_appear_timer < 0 ){
 			zombie_appear_timer = ZOMBIE_APPEAR_TIME*3;
-			newZombie(SCREEN_RIGHT, SCREEN_BOTTOM*2*(rand()%10/10.0) - SCREEN_BOTTOM,1); // åœ¨ç”»é¢å·¦éƒ¨ç”Ÿæˆä¸€ä¸‹æµ‹è¯•ç”¨åƒµå°¸
-			newZombie(SCREEN_LEFT, SCREEN_BOTTOM*2*(rand()%10/10.0) - SCREEN_BOTTOM,1); // åœ¨ç”»é¢å³éƒ¨ç”Ÿæˆä¸€ä¸‹æµ‹è¯•ç”¨åƒµå°¸
+			newZombie(SCREEN_RIGHT, SCREEN_BOTTOM*2*(rand()%10/10.0) - SCREEN_BOTTOM,1); // ÔÚ»­Ãæ×ó²¿Éú³ÉÒ»ÏÂ²âÊÔÓÃ½©Ê¬
+			newZombie(SCREEN_LEFT, SCREEN_BOTTOM*2*(rand()%10/10.0) - SCREEN_BOTTOM,1); // ÔÚ»­ÃæÓÒ²¿Éú³ÉÒ»ÏÂ²âÊÔÓÃ½©Ê¬
 		}
 
-		// bossè¡€æ¡æ‰£è¡€	
+		// bossÑªÌõ¿ÛÑª	
 		float less = zombie[boss_zombie].life*1.0/ZOMBIE_TYPE3_LIFE;
 		float totalLength = dGetSpriteWidth("bloodline");
 		float deltaLength = -(1.0-less)*totalLength;
 		dSetSpritePositionX("bloodline",SCREEN_LEFT+deltaLength+totalLength/2);
 
 		if( (boss_flag == true)&&(zombie[boss_zombie].active == false) ){
-			game_scene_flag = 1;
+			dStopSound( bgmID );
+			game_scene_flag = 7;
+			dPlaySound("win.ogg",0,1);
 		}
 	}
 	
 
-	// ä»¥ç›¸ç­‰çš„é—´éš”å‘å°„Bullet
-	// éœ€æ»¡è¶³ 1. ç©ºæ ¼é”®å¼¹èµ· 2. 0.5ç§’çš„å­å¼¹è£…å¡«æ—¶é—´ æ‰å¯ä»¥å‘å°„å­å¼¹
+	// ÒÔÏàµÈµÄ¼ä¸ô·¢ÉäBullet
+	// ĞèÂú×ã 1. ¿Õ¸ñ¼üµ¯Æğ 2. 0.5ÃëµÄ×Óµ¯×°ÌîÊ±¼ä ²Å¿ÉÒÔ·¢Éä×Óµ¯
 	for( i = 0;i < PLAYER_NUMBER;i++){
 		if ( player[i].shooting_flag == true){
 			if( player[i].bullet_appear_timer < 0){
@@ -708,13 +715,13 @@ void GameRun( float fDeltaTime )
 		}
 	}
 
-	// åˆ¤æ–­æ˜¯å¦æ¸¸æˆå¤±è´¥
+	// ÅĞ¶ÏÊÇ·ñÓÎÏ·Ê§°Ü
 	if((player[0].life <= 0)&&(player[1].life <= 0)){
 		game_scene_flag = 6;
 		dStopSound( bgmID ); 
 	}
 
-	// åˆ·æ–°ç©å®¶è¡€é‡è¡¨
+	// Ë¢ĞÂÍæ¼ÒÑªÁ¿±í
 	for(i = 0;i < PLAYER_NUMBER;i++){
 		char playerhp[64];
 		char hp[64];
@@ -723,36 +730,36 @@ void GameRun( float fDeltaTime )
 		dSetTextString(playerhp,hp);
 	}
 
-	// å„ä¸ªå¯¹è±¡å„è‡ªæ‰§è¡Œå®ƒä»¬çš„è¡Œä¸º
+	// ¸÷¸ö¶ÔÏó¸÷×ÔÖ´ĞĞËüÃÇµÄĞĞÎª
 	Move();
 }
 //==============================================================================
 //
-// æœ¬å±€æ¸¸æˆç»“æŸ
+// ±¾¾ÖÓÎÏ·½áÊø
 void GameEnd()
 {
 }
 //==========================================================================
 //
-// é¼ æ ‡ç§»åŠ¨
-// å‚æ•° fMouseX, fMouseYï¼šä¸ºé¼ æ ‡å½“å‰åæ ‡
+// Êó±êÒÆ¶¯
+// ²ÎÊı fMouseX, fMouseY£ºÎªÊó±êµ±Ç°×ø±ê
 void OnMouseMove( const float fMouseX, const float fMouseY )
 {
 	dSetSpritePosition("cursor",fMouseX,fMouseY);
 }
 //==========================================================================
 //
-// é¼ æ ‡ç‚¹å‡»
-// å‚æ•° iMouseTypeï¼šé¼ æ ‡æŒ‰é”®å€¼ï¼Œè§ enum MouseTypes å®šä¹‰
-// å‚æ•° fMouseX, fMouseYï¼šä¸ºé¼ æ ‡å½“å‰åæ ‡
+// Êó±êµã»÷
+// ²ÎÊı iMouseType£ºÊó±ê°´¼üÖµ£¬¼û enum MouseTypes ¶¨Òå
+// ²ÎÊı fMouseX, fMouseY£ºÎªÊó±êµ±Ç°×ø±ê
 void OnMouseClick( const int iMouseType, const float fMouseX, const float fMouseY )
 {
 }
 //==========================================================================
 //
-// é¼ æ ‡å¼¹èµ·
-// å‚æ•° iMouseTypeï¼šé¼ æ ‡æŒ‰é”®å€¼ï¼Œè§ enum MouseTypes å®šä¹‰
-// å‚æ•° fMouseX, fMouseYï¼šä¸ºé¼ æ ‡å½“å‰åæ ‡
+// Êó±êµ¯Æğ
+// ²ÎÊı iMouseType£ºÊó±ê°´¼üÖµ£¬¼û enum MouseTypes ¶¨Òå
+// ²ÎÊı fMouseX, fMouseY£ºÎªÊó±êµ±Ç°×ø±ê
 void OnMouseUp( const int iMouseType, const float fMouseX, const float fMouseY )
 {
 	if( iMouseType == 0 ){
@@ -761,12 +768,12 @@ void OnMouseUp( const int iMouseType, const float fMouseX, const float fMouseY )
 }
 //==========================================================================
 //
-// é”®ç›˜æŒ‰ä¸‹
-// å‚æ•° iKeyï¼šè¢«æŒ‰ä¸‹çš„é”®ï¼Œå€¼è§ enum KeyCodes å®å®šä¹‰
-// å‚æ•° iAltPress, iShiftPressï¼ŒiCtrlPressï¼šé”®ç›˜ä¸Šçš„åŠŸèƒ½é”®Altï¼ŒCtrlï¼ŒShiftå½“å‰æ˜¯å¦ä¹Ÿå¤„äºæŒ‰ä¸‹çŠ¶æ€(0æœªæŒ‰ä¸‹ï¼Œ1æŒ‰ä¸‹)
+// ¼üÅÌ°´ÏÂ
+// ²ÎÊı iKey£º±»°´ÏÂµÄ¼ü£¬Öµ¼û enum KeyCodes ºê¶¨Òå
+// ²ÎÊı iAltPress, iShiftPress£¬iCtrlPress£º¼üÅÌÉÏµÄ¹¦ÄÜ¼üAlt£¬Ctrl£¬Shiftµ±Ç°ÊÇ·ñÒ²´¦ÓÚ°´ÏÂ×´Ì¬(0Î´°´ÏÂ£¬1°´ÏÂ)
 void OnKeyDown( const int iKey, const bool bAltPress, const bool bShiftPress, const bool bCtrlPress )
 {	
-	// æ§åˆ¶ä¸»è§’ç§»åŠ¨
+	// ¿ØÖÆÖ÷½ÇÒÆ¶¯
 	if( (player[0].bit_zombie == NULL)&&(player[0].life > 0) ){
 		switch(iKey)
 		{
@@ -796,7 +803,7 @@ void OnKeyDown( const int iKey, const bool bAltPress, const bool bShiftPress, co
 	}
 	
 
-	// æ§åˆ¶ä¸»è§’ç§»åŠ¨
+	// ¿ØÖÆÖ÷½ÇÒÆ¶¯
 	if( (player[1].bit_zombie == NULL)&&(player[1].life > 0) ){
 		switch(iKey)
 		{
@@ -829,24 +836,41 @@ void OnKeyDown( const int iKey, const bool bAltPress, const bool bShiftPress, co
 }
 //==========================================================================
 //
-// é”®ç›˜å¼¹èµ·
-// å‚æ•° iKeyï¼šå¼¹èµ·çš„é”®ï¼Œå€¼è§ enum KeyCodes å®å®šä¹‰
+// ¼üÅÌµ¯Æğ
+// ²ÎÊı iKey£ºµ¯ÆğµÄ¼ü£¬Öµ¼û enum KeyCodes ºê¶¨Òå
 void OnKeyUp( const int iKey )
 {
 	if(iKey == KEY_SPACE)
 	{
 		if( game_scene_flag == 6 ){
 			game_scene_flag = 1;
+		}else if( game_scene_flag == 5 ){
+			game_scene_flag = 1;
 		}else{
 			player[0].shooting_flag = true;
 		}
 	}
 
+	if( iKey == KEY_ENTER ){
+		if( game_scene_flag == 7 ){
+			game_scene_flag = 1;
+		}
+	}
 	if(iKey == KEY_G)
 	{
 		player[1].shooting_flag = true;
 	}
 
+	if( game_scene_flag == 1 ){
+		if( iKey == KEY_1 ){
+			game_scene_flag = 2;
+		}else if( iKey == KEY_2 ){
+			game_scene_flag = 5;
+		}else if( iKey == KEY_3 ){
+			g_iGameState = 0;
+			exit(0);
+		}
+	}
 	if( game_mode_flag == SHOPPING ){
 		if( iKey == KEY_1 ){
 			if( (myMoney >= 3)&&(!bullet_up_bought) ){
@@ -855,7 +879,7 @@ void OnKeyUp( const int iKey )
 				bullet_up_bought = true;
 				myMoney = myMoney - 3;
 
-				// ä¿®æ”¹é’±å¸çš„æ˜¾ç¤º
+				// ĞŞ¸ÄÇ®±ÒµÄÏÔÊ¾
 				char text[64];
 				sprintf( text,"x%d",myMoney );
 				dSetTextString( "moneytext", text );
@@ -867,7 +891,7 @@ void OnKeyUp( const int iKey )
 				skill1_bought = true;
 				myMoney = myMoney - 3;
 
-				// ä¿®æ”¹é’±å¸çš„æ˜¾ç¤º
+				// ĞŞ¸ÄÇ®±ÒµÄÏÔÊ¾
 				char text[64];
 				sprintf( text,"x%d",myMoney );
 				dSetTextString( "moneytext", text );
@@ -879,7 +903,7 @@ void OnKeyUp( const int iKey )
 				skill2_bought = true;
 				myMoney = myMoney - 3;
 
-				// ä¿®æ”¹é’±å¸çš„æ˜¾ç¤º
+				// ĞŞ¸ÄÇ®±ÒµÄÏÔÊ¾
 				char text[64];
 				sprintf( text,"x%d",myMoney );
 				dSetTextString( "moneytext", text );
@@ -895,7 +919,7 @@ void OnKeyUp( const int iKey )
 
 	if( (player[0].bit_zombie == NULL)&&(player[0].life > 0) ){
 		
-		// ä½¿ç”¨æŠ€èƒ½
+		// Ê¹ÓÃ¼¼ÄÜ
 		if(iKey == KEY_N){
 			if( skill1_bought ){
 				FireRound(player[0].x,player[0].y,"player");
@@ -926,7 +950,7 @@ void OnKeyUp( const int iKey )
 		}
 		
 
-		// ç§»åŠ¨
+		// ÒÆ¶¯
 		switch(iKey)
 		{
 			case KEY_UP:		
@@ -981,42 +1005,13 @@ void OnKeyUp( const int iKey )
 }
 //===========================================================================
 //
-// ç²¾çµä¸ç²¾çµç¢°æ’
-// å‚æ•° szSrcNameï¼šå‘èµ·ç¢°æ’çš„ç²¾çµåå­—
-// å‚æ•° szTarNameï¼šè¢«ç¢°æ’çš„ç²¾çµåå­—
+// ¾«ÁéÓë¾«ÁéÅö×²
+// ²ÎÊı szSrcName£º·¢ÆğÅö×²µÄ¾«ÁéÃû×Ö
+// ²ÎÊı szTarName£º±»Åö×²µÄ¾«ÁéÃû×Ö
 void OnSpriteColSprite( const char *szSrcName, const char *szTarName )
 {
-	// å…ˆæ£€æµ‹é¼ æ ‡ç²¾çµç¢°æ’äº‹ä»¶
-	// é¼ æ ‡äº‹ä»¶1ï¼šä»åœºæ™¯1åˆ‡æ¢è‡³åœºæ™¯2ï¼Œå¼€å§‹å‰§æƒ…æ¨¡å¼
-	// é¼ æ ‡äº‹ä»¶2ï¼šè´­ä¹°å•†åŸç‰©å“
-	// é¼ æ ‡äº‹ä»¶1ï¼šå®Œæˆè´­ç‰©ï¼Œå¼€å§‹å‰§æƒ…æ¨¡å¼
-	if( click_flag ){
-		click_flag = false;
-		if( (!strcmp(szSrcName, "cursor")) && (!strcmp(szTarName, "start")) ){
-			game_scene_flag = 2;
-		}
 
-		// if( (!strcmp(szSrcName, "cursor")) && (!strcmp(szTarName, "bulletup")) ){
-		// 	turnWhite("bulletup");
-		// 	bullet_up_bought = true;
-		// 	dSetSpriteEnable("bulletup",0);
-		// }
-		// if( (!strcmp(szSrcName, "cursor")) && (!strcmp(szTarName, "skill1")) ){
-		// 	turnWhite("skill1");
-		// 	skill1_bought = true;
-		// 	dSetSpriteEnable("skill1",0);
-		// }
-		// if( (!strcmp(szSrcName, "cursor")) && (!strcmp(szTarName, "skill2")) ){
-		// 	turnWhite("skill2");
-		// 	skill2_bought = true;
-		// 	dSetSpriteEnable("skill2",0);
-		// }
-		// if( (!strcmp(szSrcName, "cursor")) && (!strcmp(szTarName, "next")) ){
-		// 	game_scene_flag++;
-		// } 
-	}
-
-	int i; // i,jä¸ºå¾ªç¯æ§åˆ¶å˜é‡
+	int i; // i,jÎªÑ­»·¿ØÖÆ±äÁ¿
 	int j;
 	char szName_bullet[64];
 	char szName_zombie[64];
@@ -1031,7 +1026,7 @@ void OnSpriteColSprite( const char *szSrcName, const char *szTarName )
 		}	
 		sprintf(szName_bullet,"bullet_%d",i);
 		if( !strcmp(szSrcName, szName_bullet) ){
-			// ç©å®¶å°„å‡ºçš„å­å¼¹
+			// Íæ¼ÒÉä³öµÄ×Óµ¯
 			if( bullet[i].classify == 1 ){
 				for(j = 0;j < ZOMBIE_MAX;j++){
 					if(!zombie[j].active){ 
@@ -1059,7 +1054,7 @@ void OnSpriteColSprite( const char *szSrcName, const char *szTarName )
 				if( activeflag == true ){
 					bulletDisappear(&bullet[i],szName_bullet);
 				}
-			}else if( (bullet[i].classify == 2)||(bullet[i].classify == 3) ){ // åƒµå°¸å°„å‡ºçš„å¼¹å¹•
+			}else if( (bullet[i].classify == 2)||(bullet[i].classify == 3) ){ // ½©Ê¬Éä³öµÄµ¯Ä»
 				for(j = 0;j < PLAYER_NUMBER;j++){
 					if( !player[j].life > 0 ){
 						continue;
@@ -1080,7 +1075,7 @@ void OnSpriteColSprite( const char *szSrcName, const char *szTarName )
 			
 		}
 	}
-	// åƒµå°¸æ”»å‡»äºº
+	// ½©Ê¬¹¥»÷ÈË
 	for( i = 0;i < ZOMBIE_MAX ;i++){
 		if( !zombie[i].active ){
 			continue;
@@ -1109,9 +1104,9 @@ void OnSpriteColSprite( const char *szSrcName, const char *szTarName )
 }
 //===========================================================================
 //
-// ç²¾çµä¸ä¸–ç•Œè¾¹ç•Œç¢°æ’
-// å‚æ•° szNameï¼šç¢°æ’åˆ°è¾¹ç•Œçš„ç²¾çµåå­—
-// å‚æ•° iColSideï¼šç¢°æ’åˆ°çš„è¾¹ç•Œ 0 å·¦è¾¹ï¼Œ1 å³è¾¹ï¼Œ2 ä¸Šè¾¹ï¼Œ3 ä¸‹è¾¹
+// ¾«ÁéÓëÊÀ½ç±ß½çÅö×²
+// ²ÎÊı szName£ºÅö×²µ½±ß½çµÄ¾«ÁéÃû×Ö
+// ²ÎÊı iColSide£ºÅö×²µ½µÄ±ß½ç 0 ×ó±ß£¬1 ÓÒ±ß£¬2 ÉÏ±ß£¬3 ÏÂ±ß
 void OnSpriteColWorldLimit( const char *szName, const int iColSide )
 {
 	
@@ -1119,19 +1114,19 @@ void OnSpriteColWorldLimit( const char *szName, const int iColSide )
 
 //===========================================================================
 //
-// å…¨å±€å‡½æ•°
+// È«¾Öº¯Êı
 
 void Move() {	
 	char szName[64];
-	int i; // å¾ªç¯æ§åˆ¶å˜é‡
+	int i; // Ñ­»·¿ØÖÆ±äÁ¿
 
-	//æŒ‰ç±»å‹åˆ†å‘Zombieè¡Œä¸º
+	//°´ÀàĞÍ·Ö·¢ZombieĞĞÎª
 	for(i = 0;i <ZOMBIE_MAX;i++){
 		if( !zombie[i].active ){
 			continue;
 		}
 		sprintf(szName,"zombie_%d",i);
-		// è¢«å‡»ä¸­çš„Zombieæ˜¾é»„è‰²
+		// ±»»÷ÖĞµÄZombieÏÔ»ÆÉ«
 		if( zombie[i].get_shot_timer > 0 ){
 			turnYellow(szName);
 		}else{
@@ -1139,7 +1134,7 @@ void Move() {
 		}
 		zombieMove( &zombie[i],szName );
 	}
-	// bullet è¡Œä¸º
+	// bullet ĞĞÎª
 	for(i = 0;i < BULLET_MAX;i++){
 		if( !bullet[i].active ){
 			continue;
@@ -1147,7 +1142,7 @@ void Move() {
 		sprintf(szName,"bullet_%d",i);
 		bulletMove( &bullet[i] ,szName );
 	}
-	// wall è¡Œä¸º
+	// wall ĞĞÎª
 	for(i = 0;i < WALL_MAX;i++){
 		if( !wall[i].active ){
 			continue;
@@ -1156,13 +1151,13 @@ void Move() {
 		wallMove( &wall[i],szName );
 	}
 	
-	// player è¡Œä¸º
+	// player ĞĞÎª
 	for(i = 0;i < PLAYER_NUMBER;i++){
 		sprintf(szName,"player_%d",i);
 		playerMove( &player[i],szName );
 	}
 	
-	// money è¡Œä¸º
+	// money ĞĞÎª
 	for(i = 0;i < MONEY_MAX;i++){
 		sprintf(szName,"money_%d",i);
 		moneyMove( &money[i],szName );
@@ -1170,19 +1165,19 @@ void Move() {
 }
 
 //===========================================================================
-// å…³äº Zombie çš„å‡½æ•°
+// ¹ØÓÚ Zombie µÄº¯Êı
 
 /**
- * Zombieçš„æ¿€æ´»
- * å‚æ•° ix(float)ï¼šç”Ÿæˆå¤„xåæ ‡
- * å‚æ•° iy(float)ï¼šç”Ÿæˆå¤„yåæ ‡
- * å‚æ•° classify(int)ï¼šç”Ÿæˆåƒµå°¸çš„ç§ç±»
- * è¿”å› åƒµå°¸ID(int)ï¼š(å¦‚æœæ²¡æœ‰ç©ºç¼ºï¼š-1)
+ * ZombieµÄ¼¤»î
+ * ²ÎÊı ix(float)£ºÉú³É´¦x×ø±ê
+ * ²ÎÊı iy(float)£ºÉú³É´¦y×ø±ê
+ * ²ÎÊı classify(int)£ºÉú³É½©Ê¬µÄÖÖÀà
+ * ·µ»Ø ½©Ê¬ID(int)£º(Èç¹ûÃ»ÓĞ¿ÕÈ±£º-1)
  */
 int newZombie(float ix, float iy,int classify){
 	for (int i = 0; i < ZOMBIE_MAX; i++) {
 		if (zombie[i].active == false) {
-			// å†…éƒ¨
+			// ÄÚ²¿
 			zombie[i].x = ix;
 			zombie[i].y = iy;
 			zombie[i].classify = classify; 
@@ -1193,7 +1188,7 @@ int newZombie(float ix, float iy,int classify){
 			}		
 			zombie[i].direction = 270;
  			zombie[i].active = true;
-			// å¤–éƒ¨æ˜¾ç¤º
+			// Íâ²¿ÏÔÊ¾
 			char szName[64];
 			sprintf(szName,"zombie_%d",i);
 			if( classify == 1){
@@ -1201,7 +1196,7 @@ int newZombie(float ix, float iy,int classify){
 			}else if( classify == 2){
 				dAnimateSpritePlayAnimation(szName,"zombie2_3Animation1",0);
 			}else if(classify == 3){
-				dAnimateSpritePlayAnimation(szName,"zombie2_3Animation",0);
+				dAnimateSpritePlayAnimation(szName,"zombie3_3Animation",0);
 			}
 			dSetSpritePositionX(szName,zombie[i].x);
 			dSetSpritePositionY(szName,zombie[i].y);
@@ -1214,24 +1209,24 @@ int newZombie(float ix, float iy,int classify){
 }
 
 /**
- * ZombieæŒ‚æ‰
- * æ¶ˆå¤±äº†
+ * Zombie¹Òµô
+ * ÏûÊ§ÁË
  */
 void zombieDisappear( struct Zombie* zombie , char* szName ){
 
-	// ç•™ä¸‹ä¸€æ»©è¡€è¿¹
+	// ÁôÏÂÒ»Ì²Ñª¼£
 	char bloodClone[128];
 	sprintf(bloodClone,"blood_clone_%d", rand()%1000);
 	dCloneSprite("blood",bloodClone);
 	dSetSpritePosition(bloodClone,zombie->x,zombie->y);
 	dSetSpriteLifeTime(bloodClone,5);
 
-	// åƒµå°¸æ¶ˆå¤±
+	// ½©Ê¬ÏûÊ§
 	zombie->active = false;
 	dSetSpriteVisible(szName,0);
 	dSetSpriteEnable(szName,0);
 
-	// ä¸€å®šæ¦‚ç‡äº§ç”Ÿmoney
+	// Ò»¶¨¸ÅÂÊ²úÉúmoney
 	if( rand()%10 < MONEY_APPEAR_RATE ){
 		newMoney(zombie->x,zombie->y);
 	}
@@ -1239,12 +1234,12 @@ void zombieDisappear( struct Zombie* zombie , char* szName ){
 
 
 /**
- * Zombieçš„è¡Œä¸º
- * åƒµå°¸æœç€ç©å®¶çš„æ–¹å‘èµ°
+ * ZombieµÄĞĞÎª
+ * ½©Ê¬³¯×ÅÍæ¼ÒµÄ·½Ïò×ß
  */
 void zombieMove(struct Zombie* zombie , char* szName){
 
-	// åŒæ­¥ä½ç½®
+	// Í¬²½Î»ÖÃ
 	zombie->x = dGetSpritePositionX(szName);
 	zombie->y = dGetSpritePositionY(szName);
 
@@ -1254,7 +1249,7 @@ void zombieMove(struct Zombie* zombie , char* szName){
 	float speedY;
 	float speedX;
 
-	// é”å®šç¦»å®ƒæœ€è¿‘çš„äºº,å¦‚æœæœ‰ç©å®¶æŒ‚æ‰äº†ï¼Œå°±è‡ªåŠ¨æ¢å¦å¤–ä¸€ä¸ªä¸ºç›®æ ‡
+	// Ëø¶¨ÀëËü×î½üµÄÈË,Èç¹ûÓĞÍæ¼Ò¹ÒµôÁË£¬¾Í×Ô¶¯»»ÁíÍâÒ»¸öÎªÄ¿±ê
 	for(int i = 0;i < PLAYER_NUMBER;i++){
 		deltaX[i] = player[i].x - zombie->x;
 		deltaY[i] = player[i].y - zombie->y;
@@ -1277,33 +1272,33 @@ void zombieMove(struct Zombie* zombie , char* szName){
 	}
 	
 	
-	// è€åƒµå°¸ä¼šå¯¹ç¦»å®ƒæœ€è¿‘çš„äººå‘å°„å¼¹å¹•
+	// ÀÏ½©Ê¬»á¶ÔÀëËü×î½üµÄÈË·¢Éäµ¯Ä»
 	if( zombie->classify == 2){
 		if( zombie->fire_timer < 0){
 			zombie->fire_timer = ZOMBIE_FIRE_TIME;
 			FireAim(zombie->x,zombie->y,zombie->direction,"zombie");
 		}
-	}else if( zombie->classify == 3){ // åƒµå°¸BOSSçš„å¼¹å¹•
+	}else if( zombie->classify == 3){ // ½©Ê¬BOSSµÄµ¯Ä»
 		if( zombie->fire_timer < 0){
 			zombie->fire_timer = ZOMBIE_FIRE_TIME;
 			FireAim(zombie->x,zombie->y,zombie->direction,"zombie");
-			FireAim(zombie->x,zombie->y,zombie->direction,"zombie");
 			FireRound(zombie->x,zombie->y,"zombie");
+			FireRound1(zombie->x,zombie->y,"zombie");
 		}
 	}
 
-	// æœç€äººæ–¹å‘èµ°
+	// ³¯×ÅÈË·½Ïò×ß
 	zombie->speedX = speedX;
 	zombie->speedY = speedY;
 	dSetSpriteLinearVelocityY( szName, speedY );
 	dSetSpriteLinearVelocityX( szName, speedX );
 
-	// åˆ¤æ–­æ˜¯å¦æ­»äº¡
+	// ÅĞ¶ÏÊÇ·ñËÀÍö
 	if( zombie->life <= 0){
 		zombieDisappear(zombie,szName);
 	}
 
-	// æ ¹æ®åƒµå°¸çš„ç§ç±»è®¾å®šåƒµå°¸çš„æ˜¾ç¤ºå›¾ç‰‡
+	// ¸ù¾İ½©Ê¬µÄÖÖÀàÉè¶¨½©Ê¬µÄÏÔÊ¾Í¼Æ¬
 	char left[64];
 	char right[64];
 	char bottom[64];
@@ -1345,61 +1340,61 @@ void zombieMove(struct Zombie* zombie , char* szName){
 		}
 	}
 
-	// æ ¹æ®é€Ÿåº¦è½¬å¤´ï¼Œæ›´æ¢direction
+	// ¸ù¾İËÙ¶È×ªÍ·£¬¸ü»»direction
 	if( (speedX == 0) && (speedY == 0) ){
 		return;
 	}	
-	// æ‹¿åˆ°é€Ÿåº¦å‘é‡åœ¨å³æ‰‹ç³»ä¸­çš„è§’åº¦å€¼
-	float shita = atan2(-speedY,speedX)*180/PI;// yå–è´Ÿå·ï¼šå·¦æ‰‹ç³»è½¬å³æ‰‹ç³»
-	if( shita < -170 ){ // æ–¹å‘å‘å·¦
+	// ÄÃµ½ËÙ¶ÈÏòÁ¿ÔÚÓÒÊÖÏµÖĞµÄ½Ç¶ÈÖµ
+	float shita = atan2(-speedY,speedX)*180/PI;// yÈ¡¸ººÅ£º×óÊÖÏµ×ªÓÒÊÖÏµ
+	if( shita < -170 ){ // ·½ÏòÏò×ó
 		if(zombie->direction == 180){
 			return;
 		}
 		zombie->direction = 180;
 		dAnimateSpritePlayAnimation( szName,left,0);
-	}else if( shita < -100 ){ // æ–¹å‘å‘å·¦ä¸‹è§’
+	}else if( shita < -100 ){ // ·½ÏòÏò×óÏÂ½Ç
 		if(zombie->direction == 225){
 			return;
 		}
 		zombie->direction = 225;
 		dAnimateSpritePlayAnimation(szName,bottom_left,0);
-	}else if( shita < -80 ){ // æ–¹å‘å‘ä¸‹
+	}else if( shita < -80 ){ // ·½ÏòÏòÏÂ
 		if(zombie->direction == 270){
 			return;
 		}
 		zombie->direction = 270;
 		dAnimateSpritePlayAnimation( szName, bottom, 0);
-	}else if( shita < -10 ){ // æ–¹å‘å‘å³ä¸‹è§’
+	}else if( shita < -10 ){ // ·½ÏòÏòÓÒÏÂ½Ç
 		if(zombie->direction == 315){
 			return;
 		}
 		zombie->direction = 315;
 		dAnimateSpritePlayAnimation(szName,bottom_right,0);
-	}else if( shita < 10 ){ // æ–¹å‘å‘å³
+	}else if( shita < 10 ){ // ·½ÏòÏòÓÒ
 		if(zombie->direction == 0){
 			return;
 		}
 		zombie->direction = 0;
 		dAnimateSpritePlayAnimation( szName,right,0);
-	}else if( shita < 80 ){ // æ–¹å‘å‘å³ä¸Šè§’
+	}else if( shita < 80 ){ // ·½ÏòÏòÓÒÉÏ½Ç
 		if(zombie->direction == 45){
 			return;
 		}
 		zombie->direction = 45;
 		dAnimateSpritePlayAnimation(szName,top_right,0);
-	}else if( shita < 110 ){ // æ–¹å‘å‘ä¸Š
+	}else if( shita < 110 ){ // ·½ÏòÏòÉÏ
 		if(zombie->direction == 90){
 			return;
 		}
 		zombie->direction = 90;
 		dAnimateSpritePlayAnimation( szName, top, 0);
-	}else if( shita < 170 ){ // æ–¹å‘å‘å·¦ä¸Šè§’
+	}else if( shita < 170 ){ // ·½ÏòÏò×óÉÏ½Ç
 		if(zombie->direction == 135){
 			return;
 		}
 		zombie->direction = 135;
 		dAnimateSpritePlayAnimation(szName,top_left,0);
-	}else{ // æ–¹å‘å‘å·¦
+	}else{ // ·½ÏòÏò×ó
 		if(zombie->direction == 180){
 			return;
 		}
@@ -1410,11 +1405,11 @@ void zombieMove(struct Zombie* zombie , char* szName){
 
 //===========================================================================
 //
-// å…³äº å­å¼¹ çš„å‡½æ•°
+// ¹ØÓÚ ×Óµ¯ µÄº¯Êı
 
 /**
- *  å‘å››å‘¨å‘å°„bulletçš„å‡½æ•°
- * è¿™å¯ä»¥åšæˆäººç‰©æˆ–è€…æ˜¯bossçš„æŠ€èƒ½å§
+ *  ÏòËÄÖÜ·¢ÉäbulletµÄº¯Êı
+ * Õâ¿ÉÒÔ×ö³ÉÈËÎï»òÕßÊÇbossµÄ¼¼ÄÜ°É
  * */
 void FireRound(float x, float y,char* user){
 	for(int i = 0; i < 360; i += 30 )
@@ -1428,9 +1423,21 @@ void FireRound(float x, float y,char* user){
 	}
 }
 
+void FireRound1(float x, float y,char* user){
+	for(int i = 15; i <= 345; i += 30 )
+	{
+		if( !strcmp(user,"zombie") ){
+			newBullet(x, y, i, BULLET_TYPE2_SPEED_ZOMBIE*0.6,2);
+		}	
+		if( !strcmp(user,"player") ){
+			newBullet(x, y, i, BULLET_TYPE2_SPEED_ZOMBIE*0.6,1);
+		}	
+	}
+}
+
 /**
- *  å‘å›ºå®šæ–¹å‘å‘å°„æ‰‡å½¢bulletçš„å‡½æ•°
- *  è¿™å¯ä»¥åšæˆäººç‰©æˆ–è€…æ˜¯bossçš„æŠ€èƒ½å§
+ *  Ïò¹Ì¶¨·½Ïò·¢ÉäÉÈĞÎbulletµÄº¯Êı
+ *  Õâ¿ÉÒÔ×ö³ÉÈËÎï»òÕßÊÇbossµÄ¼¼ÄÜ°É
  * */
 void FireAim(float x,float y,int direction,char* user){
 	if( !strcmp(user,"player") ){
@@ -1445,13 +1452,13 @@ void FireAim(float x,float y,int direction,char* user){
 	}
 }
 /**
- * å­å¼¹æ¿€æ´»
- * å‚æ•° ix(float)ï¼šç”Ÿæˆå¤„xåæ ‡
- * å‚æ•° iy(float)ï¼šç”Ÿæˆå¤„yåæ ‡
- * å‚æ•° idirection(float)ï¼šç§»åŠ¨çš„æ–¹å‘
- * å‚æ•° ispeed(float)ï¼šç§»åŠ¨çš„é€Ÿåº¦
- * å‚æ•° classify(float)ï¼šå­å¼¹çš„ç§ç±»
- * è¿”å› å­å¼¹ID(float)ï¼š(å¦‚æœæ²¡æœ‰ç©ºç¼ºï¼š-1)
+ * ×Óµ¯¼¤»î
+ * ²ÎÊı ix(float)£ºÉú³É´¦x×ø±ê
+ * ²ÎÊı iy(float)£ºÉú³É´¦y×ø±ê
+ * ²ÎÊı idirection(float)£ºÒÆ¶¯µÄ·½Ïò
+ * ²ÎÊı ispeed(float)£ºÒÆ¶¯µÄËÙ¶È
+ * ²ÎÊı classify(float)£º×Óµ¯µÄÖÖÀà 
+ * ·µ»Ø ×Óµ¯ID(float)£º(Èç¹ûÃ»ÓĞ¿ÕÈ±£º-1)
 */
 int newBullet(float ix, float iy, float idirection, float ispeed,int classify) {
 	for (int i = 0; i < BULLET_MAX; i++) {
@@ -1463,11 +1470,11 @@ int newBullet(float ix, float iy, float idirection, float ispeed,int classify) {
 			bullet[i].classify = classify;
 			bullet[i].active = true;
 
-			// ä»æåæ ‡è½¬åˆ°ç›´è§’åæ ‡
+			// ´Ó¼«×ø±ê×ªµ½Ö±½Ç×ø±ê
 			double radian;
-			radian = bullet[i].direction*2*PI/360;	// åº¦æ•°è½¬å¼§åº¦
+			radian = bullet[i].direction*2*PI/360;	// ¶ÈÊı×ª»¡¶È
 			bullet[i].speedX = bullet[i].speed * cos(radian);
-			bullet[i].speedY = -bullet[i].speed * sin(radian); // å³æ‰‹ç³»è½¬å·¦æ‰‹ç³»
+			bullet[i].speedY = -bullet[i].speed * sin(radian); // ÓÒÊÖÏµ×ª×óÊÖÏµ
 
 			char szName[64];
 			sprintf(szName,"bullet_%d",i);
@@ -1493,14 +1500,14 @@ int newBullet(float ix, float iy, float idirection, float ispeed,int classify) {
 }
 
 /**
- * å­å¼¹è¡Œä¸º
+ * ×Óµ¯ĞĞÎª
  */
 void bulletMove( struct Bullet* bullet ,char* szName){
-	// åŒæ­¥ä½ç½®
+	// Í¬²½Î»ÖÃ
 	bullet->x = dGetSpritePositionX(szName);
 	bullet->y = dGetSpritePositionY(szName);
 
-	// å­å¼¹å‡ºç•Œåˆ™æ¶ˆå¤±
+	// ×Óµ¯³ö½çÔòÏûÊ§
 	if ( (bullet->x < SCREEN_LEFT)||(SCREEN_RIGHT < bullet->x)||(bullet->y < SCREEN_TOP)||(SCREEN_BOTTOM < bullet->y) ) {
 		bullet->active = false;
 		dSetSpriteVisible(szName,0);
@@ -1508,7 +1515,7 @@ void bulletMove( struct Bullet* bullet ,char* szName){
 }
 
 /**
- * Bulletæ¶ˆå¤±
+ * BulletÏûÊ§
  */
 void bulletDisappear( struct Bullet* bullet , char* szName ){
 	bullet->active = false;
@@ -1516,27 +1523,27 @@ void bulletDisappear( struct Bullet* bullet , char* szName ){
 }
 //===========================================================================
 //
-// å…³äº å¢™å£ çš„å‡½æ•°
+// ¹ØÓÚ Ç½±Ú µÄº¯Êı
 
 /**
- * Wallçš„æ¿€æ´»
- * å‚æ•° ix(float)ï¼šç”Ÿæˆå¤„xåæ ‡
- * å‚æ•° iy(float)ï¼šç”Ÿæˆå¤„yåæ ‡
- * å‚æ•° classify(int): ç”Ÿæˆå¢™å£çš„ç§ç±»
- * è¿”å› å¢™å£ID(int)ï¼š(å¦‚æœæ²¡æœ‰ç©ºç¼ºï¼š-1)
+ * WallµÄ¼¤»î
+ * ²ÎÊı ix(float)£ºÉú³É´¦x×ø±ê
+ * ²ÎÊı iy(float)£ºÉú³É´¦y×ø±ê
+ * ²ÎÊı classify(int): Éú³ÉÇ½±ÚµÄÖÖÀà
+ * ·µ»Ø Ç½±ÚID(int)£º(Èç¹ûÃ»ÓĞ¿ÕÈ±£º-1)
  */
 int newWall(float ix, float iy, int classify){
 	char szName[64];
 	for (int i = 0; i < WALL_MAX; i++) {
 		if (wall[i].active == false) {
-			// å†…éƒ¨
+			// ÄÚ²¿
 			wall[i].x = ix;
 			wall[i].y = iy;
 			wall[i].classify = classify; 
-			wall[i].life = WALL_TYPE1_LIFE;	// å®Œæˆæ¡†æ¶å‰ï¼Œå…ˆå°†æ‰€æœ‰å¢™å£å½“ä½œç§ç±»1
+			wall[i].life = WALL_TYPE1_LIFE;	// Íê³É¿ò¼ÜÇ°£¬ÏÈ½«ËùÓĞÇ½±Úµ±×÷ÖÖÀà1
  			wall[i].active = true;
 
-			// å¤–éƒ¨æ˜¾ç¤º		
+			// Íâ²¿ÏÔÊ¾		
 			sprintf(szName,"wall_%d",i);
 			dSetSpritePositionX(szName,wall[i].x);
 			dSetSpritePositionY(szName,wall[i].y);
@@ -1547,7 +1554,7 @@ int newWall(float ix, float iy, int classify){
 	return -1;
 }
 
-/* å¢™å£çš„è¡Œä¸º */
+/* Ç½±ÚµÄĞĞÎª */
 void wallMove(struct Wall* wall, char* szName){
 
 	if( wall->life <= 0){
@@ -1559,23 +1566,23 @@ void wallMove(struct Wall* wall, char* szName){
 
 //===========================================================================
 //
-// å…³äº é’±å¸ çš„å‡½æ•°
+// ¹ØÓÚ Ç®±Ò µÄº¯Êı
 
 /**
- * Moneyçš„æ¿€æ´»
- * å‚æ•° ix(float)ï¼šç”Ÿæˆå¤„xåæ ‡
- * å‚æ•° iy(float)ï¼šç”Ÿæˆå¤„yåæ ‡
- * è¿”å› é’±å¸ID(int)ï¼š(å¦‚æœæ²¡æœ‰ç©ºç¼ºï¼š-1)
+ * MoneyµÄ¼¤»î
+ * ²ÎÊı ix(float)£ºÉú³É´¦x×ø±ê
+ * ²ÎÊı iy(float)£ºÉú³É´¦y×ø±ê
+ * ·µ»Ø Ç®±ÒID(int)£º(Èç¹ûÃ»ÓĞ¿ÕÈ±£º-1)
  */
 int newMoney( float ix,float iy ){
 	char szName[64];
 	for(int i = 0;i < MONEY_MAX;i++){
 		if (money[i].active == false) {
-			// å†…éƒ¨
+			// ÄÚ²¿
  			wall[i].active = true;
 			wall[i].x = ix;
 			wall[i].y = iy;
-			// å¤–éƒ¨æ˜¾ç¤º		
+			// Íâ²¿ÏÔÊ¾		
 			sprintf(szName,"money_%d",i);
 			dSetSpritePositionX(szName,ix);
 			dSetSpritePositionY(szName,iy);
@@ -1589,11 +1596,11 @@ int newMoney( float ix,float iy ){
 	return -1;
 }
 
-/* ç©å®¶æ¡åˆ°é’±å¸åè°ƒç”¨ */
+/* Íæ¼Ò¼ñµ½Ç®±Òºóµ÷ÓÃ */
 void getMoney( struct Money* money,char* szName ){
 
-	// dSetSpriteCollisionReceive( szName, 0 );// è®¾ç½®ä¸ºä¸å¯ç¢°æ’
-	dSpriteMoveTo( // é£å‘é’±å¸çš„è®¡æ•°ä½ç½®
+	// dSetSpriteCollisionReceive( szName, 0 );// ÉèÖÃÎª²»¿ÉÅö×²
+	dSpriteMoveTo( // ·ÉÏòÇ®±ÒµÄ¼ÆÊıÎ»ÖÃ
 		szName, 
 		dGetSpritePositionX("money"), 
 		dGetSpritePositionY("money"), 
@@ -1605,21 +1612,21 @@ void getMoney( struct Money* money,char* szName ){
 	money->get_timer = MONEY_FLY_TIME;
 
 }
-/* é’±å¸è¡Œä¸ºï¼Œçœ‹ä¸‹æœ‰æ²¡æœ‰ç‰¹æ•ˆå¯ä»¥åš */
+/* Ç®±ÒĞĞÎª£¬¿´ÏÂÓĞÃ»ÓĞÌØĞ§¿ÉÒÔ×ö */
 void moneyMove( struct Money* money,char* szName ){
 
-	// è¢«æ¡èµ·æ¥ä¹‹åçš„ç‰¹æ•ˆ
+	// ±»¼ñÆğÀ´Ö®ºóµÄÌØĞ§
 	if( money->get_flag ){
 		if( money->get_timer > 0){
-			// æŒ‰ç…§ç‰¹æ•ˆå‰©ä½™æ—¶é•¿å˜æ¢é’±å¸çš„å¤§å°
+			// °´ÕÕÌØĞ§Ê£ÓàÊ±³¤±ä»»Ç®±ÒµÄ´óĞ¡
 			dSetSpriteForceScale( szName, money->get_timer/MONEY_FLY_TIME );
-		}else{ // ç‰¹æ•ˆæ‰§è¡Œå®Œæ¯• é’±å¸+1
+		}else{ // ÌØĞ§Ö´ĞĞÍê±Ï Ç®±Ò+1
 			money->get_flag = false;
 			dSetSpriteVisible(szName,0);
-			dSetSpriteForceScale(szName, 1 );// å›å½’åŸæ¥å¤§å°
+			dSetSpriteForceScale(szName, 1 );// »Ø¹éÔ­À´´óĞ¡
 			myMoney++;
 
-			// ä¿®æ”¹é’±å¸çš„æ˜¾ç¤º
+			// ĞŞ¸ÄÇ®±ÒµÄÏÔÊ¾
 			char text[64];
 			sprintf( text,"x%d",myMoney );
 			dSetTextString( "moneytext", text );
@@ -1630,9 +1637,9 @@ void moneyMove( struct Money* money,char* szName ){
 
 //===========================================================================
 //
-// å…³äºç©å®¶è¡Œä¸ºçš„å‡½æ•°
+// ¹ØÓÚÍæ¼ÒĞĞÎªµÄº¯Êı
 
-/* ç©å®¶å‘å°„å­å¼¹ */
+/* Íæ¼Ò·¢Éä×Óµ¯ */
 void playerShot(Player* player) {	
 	if( player->life > 0){
 		int shootX;
@@ -1640,35 +1647,35 @@ void playerShot(Player* player) {
 		char szName[64];
 		sprintf(szName,"player_%d",player->id);
 		switch ( player->direction ){
-			case 0: // æœå³å¼€æª
+			case 0: // ³¯ÓÒ¿ªÇ¹
 				shootX = player->x + GAP_BETWEEN_PLAYER_AND_BULLET; 
 				shootY = player->y;
 				break; 
-			case 45: // æœå³ä¸Šæ–¹å¼€æª
+			case 45: // ³¯ÓÒÉÏ·½¿ªÇ¹
 				shootX = player->x + GAP_BETWEEN_PLAYER_AND_BULLET;
 				shootY = player->y + GAP_BETWEEN_PLAYER_AND_BULLET;
 				break;
-			case 90: // æœä¸Šå¼€æª
+			case 90: // ³¯ÉÏ¿ªÇ¹
 				shootX = player->x;
 				shootY = player->y - GAP_BETWEEN_PLAYER_AND_BULLET;
 				break;
-			case 135: // æœå·¦ä¸Šæ–¹å¼€æª
+			case 135: // ³¯×óÉÏ·½¿ªÇ¹
 				shootX = player->x - GAP_BETWEEN_PLAYER_AND_BULLET;
 				shootY = player->y - GAP_BETWEEN_PLAYER_AND_BULLET;
 				break;
-			case 180: // æœå·¦å¼€æª
+			case 180: // ³¯×ó¿ªÇ¹
 				shootX = player->x - GAP_BETWEEN_PLAYER_AND_BULLET;
 				shootY = player->y;
 				break;
-			case 225: // æœå·¦ä¸‹æ–¹å¼€æª
+			case 225: // ³¯×óÏÂ·½¿ªÇ¹
 				shootX = player->x - GAP_BETWEEN_PLAYER_AND_BULLET;
 				shootY = player->y + GAP_BETWEEN_PLAYER_AND_BULLET;
 				break;
-			case 270: // æœä¸‹å¼€æª
+			case 270: // ³¯ÏÂ¿ªÇ¹
 				shootX = player->x;
 				shootY = player->y + GAP_BETWEEN_PLAYER_AND_BULLET;
 				break;
-			case 315: // æœå³ä¸‹æ–¹å¼€æª
+			case 315: // ³¯ÓÒÏÂ·½¿ªÇ¹
 				shootX = player->x + GAP_BETWEEN_PLAYER_AND_BULLET;
 				shootY = player->y + GAP_BETWEEN_PLAYER_AND_BULLET;
 				break;
@@ -1684,7 +1691,7 @@ void playerShot(Player* player) {
 	}	
 }
 
-/* ç©å®¶è¡Œä¸º */
+/* Íæ¼ÒĞĞÎª */
 void playerMove( struct Player* player, char* szName){
 
 	if( player->life <= 0){
@@ -1693,11 +1700,11 @@ void playerMove( struct Player* player, char* szName){
 		dSetSpriteLinearVelocity(szName,0,0);
 		return;
 	}
-	// åŒæ­¥ä½ç½®
+	// Í¬²½Î»ÖÃ
 	player->x = dGetSpritePositionX(szName);
 	player->y = dGetSpritePositionY(szName); 
 
-	// å¤„ç†ä¸€ä¸‹ç©å®¶å‡ºç•Œçš„é—®é¢˜
+	// ´¦ÀíÒ»ÏÂÍæ¼Ò³ö½çµÄÎÊÌâ
 	if(dGetSpritePositionY( szName ) < SCREEN_TOP){
 		dSetSpritePositionY( szName,SCREEN_TOP);
 	} 
@@ -1711,7 +1718,7 @@ void playerMove( struct Player* player, char* szName){
 		dSetSpritePositionX(szName,SCREEN_RIGHT);
 	}
 
-	// è®¾ç½®é­å—æ”»å‡»ä¹‹åå„ä¸ªé˜¶æ®µç©å®¶çš„è¡Œä¸º
+	// ÉèÖÃÔâÊÜ¹¥»÷Ö®ºó¸÷¸ö½×¶ÎÍæ¼ÒµÄĞĞÎª
 	if( player->bitten_timer > PLAYER_BITTEN_TIME/2 ){
 		turnRed( szName );
 	}else if( (player->bitten_timer > 0) && (player->bitten_timer < PLAYER_BITTEN_TIME/4) ){
@@ -1724,8 +1731,8 @@ void playerMove( struct Player* player, char* szName){
 	}else{
 		turnWhite( szName );
 	}
-	// åˆ¤æ–­æ˜¯å¦é­å—äº†æ”»å‡»
-	// å—åˆ°äº†æ”»å‡»åˆ™ç›´æ¥å–æ¶ˆä¹‹åçš„è¡ŒåŠ¨
+	// ÅĞ¶ÏÊÇ·ñÔâÊÜÁË¹¥»÷
+	// ÊÜµ½ÁË¹¥»÷ÔòÖ±½ÓÈ¡ÏûÖ®ºóµÄĞĞ¶¯
 	if( player->bit_zombie != NULL ){
 		float deltaX = player->bit_zombie->x - player->x;
 		float deltaY = player->bit_zombie->y - player->y;
@@ -1753,7 +1760,7 @@ void playerMove( struct Player* player, char* szName){
 		return;
 	}
 
-	// æ ¹æ®ç©å®¶çš„ä¸åŒè·å–æœå‘çš„ä¸åŒ 
+	// ¸ù¾İÍæ¼ÒµÄ²»Í¬»ñÈ¡³¯ÏòµÄ²»Í¬ 
 	char left[64];
 	char right[64];
 	char bottom[64];
@@ -1782,61 +1789,61 @@ void playerMove( struct Player* player, char* szName){
 		sprintf(bottom_right,"player%d_1Animation",player->id+1);
 	}
 
-	// è®¾ç½®å­å¼¹å‘å°„æ–¹å‘ã€è„¸çš„æœå‘ 
+	// ÉèÖÃ×Óµ¯·¢Éä·½Ïò¡¢Á³µÄ³¯Ïò 
 	if( (player->speedX == 0) && (player->speedY == 0) ){
 		return;
 	}
-	// æ‹¿åˆ°é€Ÿåº¦å‘é‡åœ¨å³æ‰‹ç³»ä¸­çš„è§’åº¦å€¼
-	float shita = atan2(-player->speedY,player->speedX)*180/PI;// yå–è´Ÿå·ï¼šå·¦æ‰‹ç³»è½¬å³æ‰‹ç³»
-	if( shita < -170 ){ // æ–¹å‘å‘å·¦
+	// ÄÃµ½ËÙ¶ÈÏòÁ¿ÔÚÓÒÊÖÏµÖĞµÄ½Ç¶ÈÖµ
+	float shita = atan2(-player->speedY,player->speedX)*180/PI;// yÈ¡¸ººÅ£º×óÊÖÏµ×ªÓÒÊÖÏµ
+	if( shita < -170 ){ // ·½ÏòÏò×ó
 		if(player->direction == 180){
 			return;
 		}
 		player->direction = 180;
 		dAnimateSpritePlayAnimation( szName,left,0);
-	}else if( shita < -100 ){ // æ–¹å‘å‘å·¦ä¸‹è§’
+	}else if( shita < -100 ){ // ·½ÏòÏò×óÏÂ½Ç
 		if(player->direction == 225){
 			return;
 		}
 		player->direction = 225;
 		dAnimateSpritePlayAnimation(szName,bottom_left,0);
-	}else if( shita < -80 ){ // æ–¹å‘å‘ä¸‹
+	}else if( shita < -80 ){ // ·½ÏòÏòÏÂ
 		if(player->direction == 270){
 			return;
 		}
 		player->direction = 270;
 		dAnimateSpritePlayAnimation( szName, bottom, 0);
-	}else if( shita < -10 ){ // æ–¹å‘å‘å³ä¸‹è§’
+	}else if( shita < -10 ){ // ·½ÏòÏòÓÒÏÂ½Ç
 		if(player->direction == 315){
 			return;
 		}
 		player->direction = 315;
 		dAnimateSpritePlayAnimation(szName,bottom_right,0);
-	}else if( shita < 10 ){ // æ–¹å‘å‘å³
+	}else if( shita < 10 ){ // ·½ÏòÏòÓÒ
 		if(player->direction == 0){
 			return;
 		}
 		player->direction = 0;
 		dAnimateSpritePlayAnimation( szName,right,0);
-	}else if( shita < 80 ){ // æ–¹å‘å‘å³ä¸Šè§’
+	}else if( shita < 80 ){ // ·½ÏòÏòÓÒÉÏ½Ç
 		if(player->direction == 45){
 			return;
 		}
 		player->direction = 45;
 		dAnimateSpritePlayAnimation(szName,top_right,0);
-	}else if( shita < 110 ){ // æ–¹å‘å‘ä¸Š
+	}else if( shita < 110 ){ // ·½ÏòÏòÉÏ
 		if(player->direction == 90){
 			return;
 		}
 		player->direction = 90;
 		dAnimateSpritePlayAnimation( szName, top, 0);
-	}else if( shita < 170 ){ // æ–¹å‘å‘å·¦ä¸Šè§’
+	}else if( shita < 170 ){ // ·½ÏòÏò×óÉÏ½Ç
 		if(player->direction == 135){
 			return;
 		}
 		player->direction = 135;
 		dAnimateSpritePlayAnimation(szName,top_left,0);
-	}else{ // æ–¹å‘å‘å·¦
+	}else{ // ·½ÏòÏò×ó
 		if(player->direction == 180){
 			return;
 		}
@@ -1847,183 +1854,183 @@ void playerMove( struct Player* player, char* szName){
 }
 //===========================================================================
 //
-// ä¸å‰§æƒ…æœ‰å…³çš„å‡½æ•°
+// Óë¾çÇéÓĞ¹ØµÄº¯Êı
 
-/* è½½å…¥å‰§æƒ… */
+/* ÔØÈë¾çÇé */
 void loadPlots(){
 	plot[0].id = 0;
 	plot[0].speaker = BOY;
-	plot[0].content = "æ²¡æƒ³åˆ°ç«Ÿç„¶è¢«ä¼ é€åˆ°æœªæ¥å»äº†";
+	plot[0].content = "Ã»Ïëµ½¾¹È»±»´«ËÍµ½Î´À´È¥ÁË";
 	plot[0].picture1 = BOY_NERVOUS;
 	plot[0].picture2 = GIRL_NORMAL;
 	plot[0].end_flag = false;
 
 	plot[1].id = 1;
 	plot[1].speaker = GIRL;
-	plot[1].content = "è¿˜å¥½æ˜¯æ¥åˆ°äº†æœªæ¥ï¼Œè¦æ˜¯å»åˆ°è¿œå¤æ—¶ä»£éƒ½æ²¡æœ‰å¥¶èŒ¶éƒ½æ²¡å¾—å–äº†";
+	plot[1].content = "»¹ºÃÊÇÀ´µ½ÁËÎ´À´£¬ÒªÊÇÈ¥µ½Ô¶¹ÅÊ±´ú¶¼Ã»ÓĞÄÌ²è¶¼Ã»µÃºÈÁË";
 	plot[1].picture1 = BOY_NERVOUS;
 	plot[1].picture2 = GIRL_HAPPY;
 	plot[1].end_flag = false;
 
 	plot[2].id = 2;
 	plot[2].speaker = BOY;
-	plot[2].content = "æ¬¸ä½ è¿˜æœ‰å¿ƒæƒ…å–å¥¶èŒ¶â€¦";
+	plot[2].content = "šGÄã»¹ÓĞĞÄÇéºÈÄÌ²è¡­";
 	plot[2].picture1 = BOY_NERVOUS;
 	plot[2].picture2 = GIRL_HAPPY;
 	plot[2].end_flag = false;
 
 	plot[3].id = 3;
 	plot[3].speaker = BOY;
-	plot[3].content = "æ¬¸å“ªæ¥çš„å¥¶èŒ¶!";
+	plot[3].content = "šGÄÄÀ´µÄÄÌ²è!";
 	plot[3].picture1 = BOY_SCARED;
 	plot[3].picture2 = GIRL_HAPPY;
 	plot[3].end_flag = false;
 	
 	plot[4].id = 4;
 	plot[4].speaker = GIRL;
-	plot[4].content = "åˆšæ‰è‡ªåŠ¨è´©å–æœºé‡Œé¢å–çš„æ¥ç€";
+	plot[4].content = "¸Õ²Å×Ô¶¯··Âô»úÀïÃæÂôµÄÀ´×Å";
 	plot[4].picture1 = BOY_SCARED;
 	plot[4].picture2 = GIRL_CURIOUS;
 	plot[4].end_flag = false;
 
 	plot[5].id = 5;
 	plot[5].speaker = BOY;
-	plot[5].content = "å•Šï¼Œå®Œå…¨æ²¡çœ‹è§ï¼è¯è¯´å›æ¥ï¼Œæœªæ¥ä¸–ç•Œæ€ä¹ˆå®Œå…¨çœ‹ä¸è§äººå½±å•Š";
+	plot[5].content = "°¡£¬ÍêÈ«Ã»¿´¼û£¡»°Ëµ»ØÀ´£¬Î´À´ÊÀ½çÔõÃ´ÍêÈ«¿´²»¼ûÈËÓ°°¡";
 	plot[5].picture1 = BOY_NERVOUS;
 	plot[5].picture2 = GIRL_CURIOUS;
 	plot[5].end_flag = false;
 
 	plot[6].id = 6;
 	plot[6].speaker = GIRL;
-	plot[6].content = "åƒµå°¸å€’æœ‰ä¸å°‘";
+	plot[6].content = "½©Ê¬µ¹ÓĞ²»ÉÙ";
 	plot[6].picture1 = BOY_NORMAL;
 	plot[6].picture2 = GIRL_HAPPY;
 	plot[6].end_flag = false;
 
 	plot[7].id = 7;
 	plot[7].speaker = BOY;
-	plot[7].content = "çœŸçš„æ¬¸";
+	plot[7].content = "ÕæµÄšG";
 	plot[7].picture1 = BOY_CRY;
 	plot[7].picture2 = GIRL_HAPPY;
 	plot[7].end_flag = false;
 
 	plot[8].id = 8;
 	plot[8].speaker = GIRL;
-	plot[8].content = "æ‹¿ä¸Šè¿™ä¸ª";
+	plot[8].content = "ÄÃÉÏÕâ¸ö";
 	plot[8].picture1 = BOY_NERVOUS;
 	plot[8].picture2 = GIRL_NORMAL;
 	plot[8].end_flag = false;
 
 	plot[9].id = 9;
 	plot[9].speaker = BOY;
-	plot[9].content = "è¿™æ˜¯â€¦æ‰‹æªï¼Œå“ªé‡Œæ¥çš„å•Š";
+	plot[9].content = "ÕâÊÇ¡­ÊÖÇ¹£¬ÄÄÀïÀ´µÄ°¡";
 	plot[9].picture1 = BOY_SCARED;
 	plot[9].picture2 = GIRL_NORMAL;
 	plot[9].end_flag = false;
 
 	plot[10].id = 10;
 	plot[10].speaker = GIRL;
-	plot[10].content = "ä¹Ÿæ˜¯è‡ªåŠ¨è´©å–æœºé‡Œæ¥çš„";
+	plot[10].content = "Ò²ÊÇ×Ô¶¯··Âô»úÀïÀ´µÄ";
 	plot[10].picture1 = BOY_SCARED;
 	plot[10].picture2 = GIRL_HAPPY;
 	plot[10].end_flag = true;
 
 	plot[11].id = 11;
 	plot[11].speaker = GIRL;
-	plot[11].content = "æˆ‘ä»¬å¿…é¡»å›åˆ°è¿‡å»é˜»æ­¢è¿™ä¸€åˆ‡çš„å‘ç”Ÿ";
+	plot[11].content = "ÎÒÃÇ±ØĞë»Øµ½¹ıÈ¥×èÖ¹ÕâÒ»ÇĞµÄ·¢Éú";
 	plot[11].picture1 = BOY_NERVOUS;
 	plot[11].picture2 = GIRL_HAPPY;
 	plot[11].end_flag = false;
 
 	plot[12].id = 12;
 	plot[12].speaker = BOY;
-	plot[12].content = "å•Šï¼Œæ¥äº†ï¼Œç‹é“çš„å‰§æƒ…å±•å¼€";
+	plot[12].content = "°¡£¬À´ÁË£¬ÍõµÀµÄ¾çÇéÕ¹¿ª";
 	plot[12].picture1 = BOY_NORMAL;
 	plot[12].picture2 = GIRL_NORMAL;
 	plot[12].end_flag = false;
 
 	plot[13].id = 13;
 	plot[13].speaker = GIRL;
-	plot[13].content = "è¿˜è®°å¾—åšå£«å—ï¼Œæˆ‘æ€€ç–‘è¿™å°±æ˜¯ä»–åšçš„å¥½äº‹";
+	plot[13].content = "»¹¼ÇµÃ²©Ê¿Âğ£¬ÎÒ»³ÒÉÕâ¾ÍÊÇËû×öµÄºÃÊÂ";
 	plot[13].picture1 = BOY_NORMAL;
 	plot[13].picture2 = GIRL_NORMAL;
 	plot[13].end_flag = false;
 
 	plot[14].id = 14;
 	plot[14].speaker = BOY;
-	plot[14].content = "å“¦ï¼Œä»–çªƒå–äº†æˆ‘ä»¬çš„ç ”ç©¶èµ„æ–™ï¼Œè¿˜æŠŠæˆ‘ä»¬é€åˆ°å…¶ä»–æ—¶ç©º";
+	plot[14].content = "Å¶£¬ËûÇÔÈ¡ÁËÎÒÃÇµÄÑĞ¾¿×ÊÁÏ£¬»¹°ÑÎÒÃÇËÍµ½ÆäËûÊ±¿Õ";
 	plot[14].picture1 = BOY_NERVOUS;
 	plot[14].picture2 = GIRL_CURIOUS;
 	plot[14].end_flag = false;
 
 	plot[15].id = 15;
 	plot[15].speaker = BOY;
-	plot[15].content = "å°±æ˜¯ä¸ºäº†ç ”ç©¶åƒµå°¸ç—…æ¯’ï¼";
+	plot[15].content = "¾ÍÊÇÎªÁËÑĞ¾¿½©Ê¬²¡¶¾£¡";
 	plot[15].picture1 = BOY_NERVOUS;
 	plot[15].picture2 = GIRL_CURIOUS;
 	plot[15].end_flag = false;
 
 	plot[16].id = 16;
 	plot[16].speaker = GIRL;
-	plot[16].content = "æ²¡é”™ï¼Œæˆ‘ä»¬ç°åœ¨è¦åšçš„å°±æ˜¯æ‰“å¼€æ—¶ç©ºä¹‹é—¨å›å»10å¹´å‰çš„ç ”ç©¶æ‰€";
+	plot[16].content = "Ã»´í£¬ÎÒÃÇÏÖÔÚÒª×öµÄ¾ÍÊÇ´ò¿ªÊ±¿ÕÖ®ÃÅ»ØÈ¥10ÄêÇ°µÄÑĞ¾¿Ëù";
 	plot[16].picture1 = BOY_NORMAL;
 	plot[16].picture2 = GIRL_NORMAL;
 	plot[16].end_flag = false;
 
 	plot[17].id = 17;
 	plot[17].speaker = GIRL;
-	plot[17].content = "é˜»æ­¢ä»–â€¦å¥¶èŒ¶çœŸå¥½å–";
+	plot[17].content = "×èÖ¹Ëû¡­ÄÌ²èÕæºÃºÈ";
 	plot[17].picture1 = BOY_NORMAL;
 	plot[17].picture2 = GIRL_HAPPY;
 	plot[17].end_flag = false;
 
 	plot[18].id = 18;
 	plot[18].speaker = BOY;
-	plot[18].content = "æ¬¸â€¦ä½ æ€ä¹ˆè¿˜å–ç€å¥¶èŒ¶";
+	plot[18].content = "šG¡­ÄãÔõÃ´»¹ºÈ×ÅÄÌ²è";
 	plot[18].picture1 = BOY_SCARED;
 	plot[18].picture2 = GIRL_HAPPY;
 	plot[18].end_flag = true;
 
 	plot[19].id = 19;
 	plot[19].speaker = BOY;
-	plot[19].content = "ç ”ç©¶æ‰€é‡Œé¢å·²ç»å‡ºç°äº†åƒµå°¸ï¼Œè¿˜æ˜¯æ™šäº†ä¸€æ­¥å—";
+	plot[19].content = "ÑĞ¾¿ËùÀïÃæÒÑ¾­³öÏÖÁË½©Ê¬£¬»¹ÊÇÍíÁËÒ»²½Âğ";
 	plot[19].picture1 = BOY_NERVOUS;
 	plot[19].picture2 = GIRL_NORMAL;
 	plot[19].end_flag;
 
 	plot[20].id = 20;
 	plot[20].speaker = GIRL;
-	plot[20].content = "å…¶å®åƒµå°¸è¿˜æ²¡æœ‰å‡ºç ”ç©¶æ‰€å‘€ï¼Œåº”è¯¥è¯´æ¥å¾—åˆšåˆšå¥½å§";
+	plot[20].content = "ÆäÊµ½©Ê¬»¹Ã»ÓĞ³öÑĞ¾¿ËùÑ½£¬Ó¦¸ÃËµÀ´µÃ¸Õ¸ÕºÃ°É";
 	plot[19].picture1 = BOY_NERVOUS;
 	plot[19].picture2 = GIRL_NORMAL;
 	plot[19].end_flag = false;
 	
 	plot[21].id = 21;
 	plot[21].speaker = BOY;
-	plot[21].content = "è¿™ä¹ˆè¯´æ¥åªç”¨è§£å†³ç ”ç©¶æ‰€çš„é—®é¢˜æ˜¯å—";
+	plot[21].content = "ÕâÃ´ËµÀ´Ö»ÓÃ½â¾öÑĞ¾¿ËùµÄÎÊÌâÊÇÂğ";
 	plot[21].picture1 = BOY_NORMAL;
 	plot[21].picture2 = GIRL_HAPPY;
 	plot[21].end_flag = true;
 }
 
 /**
- * å±•ç¤ºå‰§æƒ… ä¸GameRunåŒçº§çš„å‡½æ•°
+ * Õ¹Ê¾¾çÇé ÓëGameRunÍ¬¼¶µÄº¯Êı
  */
 void playPlots( float fDeltaTime ){
 
-	// æ£€æµ‹èŠ‚ç‚¹æ˜¯å¦è·³è½¬ï¼Œæ˜¯åˆ™æ›´æ¢å±•ç¤ºå†…å®¹
+	// ¼ì²â½ÚµãÊÇ·ñÌø×ª£¬ÊÇÔò¸ü»»Õ¹Ê¾ÄÚÈİ
 	if( current_plot != currnet_plot_ensure){
 
 		currnet_plot_ensure = current_plot;
 
-		// å…ˆè®©æ˜¾ç¤ºå‰§æƒ…çš„ç²¾çµå¯è§
+		// ÏÈÈÃÏÔÊ¾¾çÇéµÄ¾«Áé¿É¼û
 		dSetSpriteVisible("boy",1);
 		dSetSpriteVisible("girl",1);
 		dSetSpriteVisible("panel",1);
 		dSetSpriteVisible("speaker",1);
 		dSetSpriteVisible("content",1);
 
-		// è®¾ç½®click_flag é¿å…å‡ºç°å‰§æƒ…é”™è¯¯è¢«è·³è¿‡
+		// ÉèÖÃclick_flag ±ÜÃâ³öÏÖ¾çÇé´íÎó±»Ìø¹ı
 		click_flag = false;
 
 		if( !strcmp(plot[current_plot].speaker,BOY) ){
@@ -2040,13 +2047,13 @@ void playPlots( float fDeltaTime ){
 		dSetTextString( "content", plot[current_plot].content );
 	}
 
-	// æ£€æµ‹æ˜¯å¦ç‚¹å‡»å±å¹•ï¼Œç‚¹å‡»äº†åˆ™è·³è½¬èŠ‚ç‚¹
+	// ¼ì²âÊÇ·ñµã»÷ÆÁÄ»£¬µã»÷ÁËÔòÌø×ª½Úµã
 	if( click_flag == true){
 		click_flag = false;
-		// æ£€æµ‹å½“å‰èŠ‚ç‚¹æ˜¯å¦ä¸ºè¿™æ®µå‰§æƒ…çš„æœ€åä¸€ä¸ªèŠ‚ç‚¹
+		// ¼ì²âµ±Ç°½ÚµãÊÇ·ñÎªÕâ¶Î¾çÇéµÄ×îºóÒ»¸ö½Úµã
 		if( plot[current_plot].end_flag ){
 			current_plot++;
-			// åšä¸€ä¸ªé€€å‡ºç‰¹æ•ˆ
+			// ×öÒ»¸öÍË³öÌØĞ§
 			dCloneSprite("boy","boy_show");
 			dCloneSprite("girl","girl_show");
 			dCloneSprite("panel","panel_show");
@@ -2057,7 +2064,7 @@ void playPlots( float fDeltaTime ){
 			dSetSpriteLifeTime("girl_show",3);
 			dSetSpriteLifeTime("panel_show",3);
 
-			// æ’­æ”¾ç»“æŸè®©æ˜¾ç¤ºå‰§æƒ…çš„ç²¾çµä¸å¯è§
+			// ²¥·Å½áÊøÈÃÏÔÊ¾¾çÇéµÄ¾«Áé²»¿É¼û
 			dSetSpriteVisible("boy",0);
 			dSetSpriteVisible("girl",0);
 			dSetSpriteVisible("panel",0);
@@ -2073,7 +2080,7 @@ void playPlots( float fDeltaTime ){
 
 //===========================================================================
 //
-// å…³äºè´­ç‰©çš„å‡½æ•° 
+// ¹ØÓÚ¹ºÎïµÄº¯Êı 
 void goShopping( float fDeltaTime ){
 	if( !shop_enter_flag ){
 		shop_enter_flag = true;
@@ -2085,10 +2092,10 @@ void goShopping( float fDeltaTime ){
 
 //===========================================================================
 //
-// API çš„ä½¿ç”¨ç®€åŒ–å‡½æ•°
+// API µÄÊ¹ÓÃ¼ò»¯º¯Êı
 
 /**
- * å°†ç²¾çµå˜æˆé»„è‰²è°ƒ
+ * ½«¾«Áé±ä³É»ÆÉ«µ÷
  */
 void turnYellow( char *szName ){
 	dSetSpriteColorBlue( szName, 0 );
@@ -2097,7 +2104,7 @@ void turnYellow( char *szName ){
 }
 
 /**
- * å°†ç²¾çµå˜æˆçº¢è‰²è°ƒ
+ * ½«¾«Áé±ä³ÉºìÉ«µ÷
  */
 void turnRed( char *szName ){
 	dSetSpriteColorBlue( szName, 0 );
@@ -2107,7 +2114,7 @@ void turnRed( char *szName ){
 
 
 /**
- * å°†ç²¾çµå˜æˆæ­£å¸¸è‰²è°ƒ
+ * ½«¾«Áé±ä³ÉÕı³£É«µ÷
  */
 void turnWhite( char *szName ){
 	dSetSpriteColorBlue( szName, 255 );
@@ -2115,7 +2122,7 @@ void turnWhite( char *szName ){
 	dSetSpriteColorGreen( szName, 255 );
 }
 /**
- * å°†ç²¾çµå˜æˆç°è‰²è°ƒ
+ * ½«¾«Áé±ä³É»ÒÉ«µ÷
  */
 void turnGray( char *szName ){
 	dSetSpriteColorBlue( szName, 150 );
